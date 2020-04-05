@@ -1,0 +1,30 @@
+<html>
+	<header>
+		<title>Get report</title>
+	</header>
+	<body>
+		<h1>Get report</h1>
+		<h2>Options</h2>
+		<ul>
+			<li><a href="/report/days/">Today</a></li>
+			<li><a href="/report/weeks/">This week</a></li>
+			<li><a href="/report/months/">This month</a></li>
+		</ul>
+		<hr/>
+		<h1>Latest 5 results</h1>
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Result</th>
+				<th>Exam result obtained at</th>
+			</tr>
+			{% for result in latest_five_results %}
+			<tr>
+				{% for value in result %}
+				<td>{{ value }}</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</table>
+	</body>
+</html>
