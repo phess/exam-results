@@ -1,0 +1,42 @@
+<html>
+	<header>
+		<title>Latest results</title>
+	</header>
+	<body>
+		<h1>Últimos resultados</h1>
+		<table>
+			<tr>
+				<th>Nome do paciente</th>
+				<th>Instituição</th>
+				<th>Data da amostra</th>
+				<th>ID da amostra</th>
+				<th>Resultado</th>
+				<th>Data &amp; hora do resultado</th>
+			</tr>
+			{% for result in result_list %}
+			<tr>
+				<td>{{ result.patient_full_name }}</td>
+				<td>{{ result.institution.short_name }}</td>
+				<td>{{ result.sample_received }}</td>
+				<td>{{ result.sample_id }}</td>
+				<td>{{ result.exam_result }}</td>
+				<td>{{ result.exam_date }}</td>
+
+			</tr>
+			{% endfor %}
+		</table>
+
+
+<!--
+    patient_full_name = models.CharField(max_length=200)
+        patient_id = models.CharField(max_length=20)
+	    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+	        sample_received = models.DateField('date received')
+		    sample_id = models.CharField(max_length=40)
+		        exam_result = models.CharField(choices=RESULT_CHOICES, max_length=30)
+			    exam_date = models.DateTimeField('date issued', auto_now_add=False)
+			        result_submitted = models.BooleanField()
+-->
+
+	</body>
+</html>
