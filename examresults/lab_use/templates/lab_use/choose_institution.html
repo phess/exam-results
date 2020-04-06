@@ -1,0 +1,32 @@
+<html>
+	<header>
+	</header>
+	<body>
+		<h1>What institution?</h1>
+		<ul>
+			{% for institution in latest_institutions %}
+			<li><a href="/new_result/{{ institution.id }}/">{{ institution.full_name }}</a></li>
+			{% endfor %}
+		</ul>
+		<hr/>
+		<form action="/new_result/with_institution/" method="POST">
+		{% csrf_token %}
+			<label for="institution">Ou escolha uma da lista:</label>
+			<select id="institution_id" name="institution_id">
+				{% for institution in all_institutions %}
+				<option value="{{ institution.id }}">{{ institution.full_name }}</option>
+				{% endfor %}
+			</select>
+			<input type="submit" value="Usar esta instituição">
+		</form>
+		<hr/>
+		<p>Ou crie uma nova instituição</p>
+		<form action="/new_institution/" method="POST">
+		{% csrf_token %}
+			<p><label for="full_name">Nome completo da instituição:</label><input type="text" id="full_name" name="full_name"/></p>
+			<p><label for="short_name">Apelido da instituição:</label><input type="text" id="short_name" name="short_name"/></p>
+			<p><label for="city">Cidade:</label><input type="text" id="city" name="city"/> / <label for="city">UF (sigla, 2 letras):</label><input type="text" id="state" name="state"/></p>
+			<input type="submit" value="Criar esta instituição">
+		</form>
+	</body>
+</html>
