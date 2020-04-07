@@ -1,0 +1,11 @@
+<html>
+	<body>
+		<h1>Upload a new spreadsheet in csv format</h1>
+
+		<form action="/sheet_upload/" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form }}
+			<input type="submit" value="Enviar">
+		</form>
+	</body>
+</html>

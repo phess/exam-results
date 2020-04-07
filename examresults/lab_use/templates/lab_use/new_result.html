@@ -25,7 +25,7 @@
 					<label for="negative">NEG</label><br/>
 					<input type="radio" id="exam_result" name="exam_result" value="undefined">
 					<label for="undefined">inc</label></td>
-				<td><input type="datetime-local" id="exam_date" name="exam_date"></td>
+				<td><input type="datetime-local" id="result_date" name="result_date"></td>
 			</tr>
 		</table>
 		<input type="hidden" id="institution_id" name="institution_id" value="{{ institution.id }}" />
@@ -41,7 +41,7 @@
 	        sample_received = models.DateField('date received')
 		    sample_id = models.CharField(max_length=40)
 		        exam_result = models.CharField(choices=RESULT_CHOICES, max_length=30)
-			    exam_date = models.DateTimeField('date issued', auto_now_add=False)
+			    result_date = models.DateTimeField('date issued', auto_now_add=False)
 			        result_submitted = models.BooleanField()
 -->
 
