@@ -1,5 +1,8 @@
-<html>
-	<body>
+{% extends "lab_use/base.html" %}
+
+{% block title %}Upload a new spreadsheet in csv format{% endblock %}
+
+{% block content %}
 		<h1>Upload a new spreadsheet in csv format</h1>
 
 		<form action="/sheet_upload/" method="post" enctype="multipart/form-data">
@@ -7,5 +10,4 @@
 			{{ form }}
 			<input type="submit" value="Enviar">
 		</form>
-	</body>
-</html>
+{% endblock %}

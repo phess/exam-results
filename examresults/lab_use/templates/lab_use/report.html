@@ -1,9 +1,8 @@
-<html>
-	<header>
-		<title>Get report</title>
-	</header>
-	<body>
-		<h1>Get report</h1>
+{% extends "lab_use/base.html" %}
+
+{% block title %}Get report{% endblock %}
+
+{% block content %}
 		<h2>Options</h2>
 		<ul>
 			<li><a href="/report/days/">Today</a></li>
@@ -26,5 +25,4 @@
 			</tr>
 			{% endfor %}
 		</table>
-	</body>
-</html>
+{% endblock %}

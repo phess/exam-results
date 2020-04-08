@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style>
+		body {
+			background-color: #ffffdd;
+		}
+		div#title {
+			float: left;
+			width: 100%;
+			border-width: 5px;
+			border-color: black;
+			text-align: center;
+			background-color: #ffddff;
+		}
+		div#sidebar {
+			background-color: #ddddff;
+			float: left;
+			width: 20%;
+			height: 100%;
+		}
+		div#content {
+			float:left;
+			width: 80%;
+		}
+	</style>
+    <!--
+	    <link rel="stylesheet" href="style.css">
+    -->
+    <title>{% block title %}Generic title{% endblock %}</title>
+</head>
+
+<body>
+	<div id="title">
+		<h1>Title</h1>
+		<a href="/admin"><p style="text-align:right;text-style:italic">Admin site</p></a>
+	</div>
+    <div id="sidebar">
+	<p>Sidebar</p>
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Start page</a></li>
+            <li><a href="/reports/">Reports</a></li>
+            <li><a href="/new_upload/">New upload</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import ExamResult, Institution
+from .models import ExamResult, Institution, SampleType
 from django.views import generic
 from django.template import loader
 from .forms import UploadSheetForm
 import csv
 import io
+import datetime
 
 class IndexView(generic.ListView):
     template_name = 'lab_use/latest_results.html'
@@ -22,15 +23,69 @@ def bulk_upload(request):
 def process_sheet(f):
     fcontents = f.read().decode('utf-8')
     infile = io.StringIO(fcontents)
-    reader = csv.DictReader(infile)
-    # TODO: create objects with sheet contents
-    ret_list = []
-    for row in reader:
-        ret_list.append(row)
+    reader = csv.DictReader(infile, dialect='excel')
+
     header_field_map = {
-            
+            # csv : model
+            'Instituição': 'institution',
+            'Data de recebimento': 'sample_receive_date',
+            'Número de registro': 'sample_id',
+            'CPF': 'patient_unique_id',
+            'Nome': 'patient_full_name',
+            'Data de Nascimento': 'patient_birthday',
+            'Data da coleta': 'sample_date',
+            'Material coletado': 'sample_types',
+            'Data do início dos sintomas': 'symptoms_start_date',
+            'Equipe extração': 'extraction_team',
+            'Kit extração': 'extraction_kit',
+            'Equipe PCR': 'pcr_team',
+            'Máquina PCR': 'pcr_equipment',
+            'Resultado': 'result',
+            'Conclusão': 'conclusion',
+            'Observação': 'notes',
     }
-    return ret_list
+
+    for row in reader:
+        #ret_list.append(row)
+        new_result = ExamResult()
+        for k,v in row.items():
+            new_key = header_field_map[k]
+            if new_key == 'sample_types':
+                new_value = []
+                for sub_value in v.split('/'):
+                    new_sub_value = SampleType.objects.get_or_create(name = sub_value)[0]
+                    # Adding sample_types can only be done once new_result has
+                    # been committed to the DB and has an ID.
+                    #new_result.sample_types.add(new_value)
+                    new_value.append(new_sub_value)
+                    add_after_save=True
+            elif new_key == 'institution':
+                inst = Institution.objects.get_or_create(short_name = v)
+                new_result.institution = inst[0]
+            elif 'day' in new_key or 'date' in new_key:
+                # If the last 4 characters are digits, then the format is
+                # DD-MM-YYYY and we need to reverse it.
+                if v[-4:].isdigit():
+                    # D-M-Y  -->  Y-M-D
+                    # we need to split by '-', then reverse, then join by '-':
+                    d_m_y = v.split('-')
+                    y_m_d = d_m_y.copy()
+                    y_m_d.reverse()
+                    y_m_d = '-'.join(y_m_d)
+                    new_result.__dict__[new_key] = y_m_d
+                else:
+                    new_result.__dict__[new_key] = v
+                    
+            else:
+                new_result.__dict__[new_key] = v
+
+        new_result.save()
+        if add_after_save:
+            add_after_save=False
+            for val in new_value:
+                new_result.sample_types.add(val)
+
+    return new_result.__dict__
 
 
 

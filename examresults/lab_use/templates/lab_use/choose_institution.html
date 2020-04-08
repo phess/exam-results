@@ -1,9 +1,8 @@
-<html>
-	<header>
-	</header>
-	<body>
-		<h1>What institution?</h1>
-		<ul>
+{% extends "lab_use/base.html" %}
+
+{% block title %}What institution?{% endblock %}
+
+{% block content %}
 			{% for institution in latest_institutions %}
 			<li><a href="/new_result/{{ institution.id }}/">{{ institution.full_name }}</a></li>
 			{% endfor %}
@@ -28,5 +27,4 @@
 			<p><label for="city">Cidade:</label><input type="text" id="city" name="city"/> / <label for="city">UF (sigla, 2 letras):</label><input type="text" id="state" name="state"/></p>
 			<input type="submit" value="Criar esta instituição">
 		</form>
-	</body>
-</html>
+{% endblock %}

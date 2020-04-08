@@ -1,9 +1,8 @@
-<html>
-	<header>
-		<title>Latest results</title>
-	</header>
-	<body>
-		<h1>Últimos resultados</h1>
+{% extends "lab_use/base.html" %}
+
+{% block title %}Latest results{% endblock %}
+
+{% block content %}
 		<table>
 			<tr>
 				{% for k in result_list.first.keys %}
@@ -18,18 +17,4 @@
 			</tr>
 			{% endfor %}
 		</table>
-
-
-<!--
-    patient_full_name = models.CharField(max_length=200)
-        patient_id = models.CharField(max_length=20)
-	    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
-	        sample_received = models.DateField('date received')
-		    sample_id = models.CharField(max_length=40)
-		        exam_result = models.CharField(choices=RESULT_CHOICES, max_length=30)
-			    result_date = models.DateTimeField('date issued', auto_now_add=False)
-			        result_submitted = models.BooleanField()
--->
-
-	</body>
-</html>
+{% endblock %}
