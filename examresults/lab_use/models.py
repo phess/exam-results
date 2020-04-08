@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 
 RESULT_CHOICES = [
@@ -52,7 +54,22 @@ class ExamResult(models.Model):
     
     # result_submitted = models.BooleanField()
 
-class Document(models.Model):
-    description = models.CharField(max_length=255, blank=True)
-    document = models.FileField(upload_to='documents/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+# class Document(models.Model):
+#     description = models.CharField(max_length=255, blank=True)
+#     document = models.FileField(upload_to='documents/')
+#     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+class OverwriteStorage(FileSystemStorage):
+    '''
+    Muda o comportamento padrão do Django e o faz sobrescrever arquivos de
+    mesmo nome que foram carregados pelo usuário ao invés de renomeá-los.
+    '''
+    def get_available_name(self, name):
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
+
+class Media(models.Model):
+    name = models.CharField("Nome", max_length=128)
+#     media = models.FileField("Arquivo", upload_to=settings.MEDIA_ROOT, storage=OverwriteStorage())
+    media = models.FileField("Arquivo", upload_to="lab_use/media/", storage=OverwriteStorage())
