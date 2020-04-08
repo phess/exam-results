@@ -1,10 +1,8 @@
-<html>
-	<header>
-		<title>Latest results</title>
-	</header>
-	<body>
+{% extends 'lab_use/base.html' %}
+
+{% block content %}
 		<h1>Últimos resultados</h1>
-		<table>
+		<table border="1">
 			<tr>
 				<th>Nome do paciente</th>
 				<th>Instituição</th>
@@ -26,17 +24,4 @@
 			{% endfor %}
 		</table>
 
-
-<!--
-    patient_full_name = models.CharField(max_length=200)
-        patient_id = models.CharField(max_length=20)
-	    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
-	        sample_received = models.DateField('date received')
-		    sample_id = models.CharField(max_length=40)
-		        exam_result = models.CharField(choices=RESULT_CHOICES, max_length=30)
-			    exam_date = models.DateTimeField('date issued', auto_now_add=False)
-			        result_submitted = models.BooleanField()
--->
-
-	</body>
-</html>
+{% endblock %}

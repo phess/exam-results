@@ -2,10 +2,11 @@
 
 {% block content %}
 <p>
-<h3>Relatório</h3>
+<h3>Reenvio</h3>
 <p>
 		<table border="1">
 			<tr>
+                <td>Reenvio</td>
 				<td>Enviar Report</td>
 				<td>Instituição</td>
 				<td>Data de recebimento</td>
@@ -27,6 +28,7 @@
 			{% comment %} {{ object_list }} {% endcomment %}
 			{% for instance in object_list %}
 				<tr>
+                    <td><a href=/pdf_generate/{{ instance.id }}>click here</a></td>
 					<td>{{ instance.send_report }}</td>
 					<td>{{ instance.institution }}</td>
 					<td>{{ instance.sample_received }}</td>
