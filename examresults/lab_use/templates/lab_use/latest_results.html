@@ -1,9 +1,8 @@
-{% extends "lab_use/base.html" %}
-
-{% block title %}Latest results{% endblock %}
+{% extends 'lab_use/base.html' %}
 
 {% block content %}
-		<table>
+		<h1>Últimos resultados</h1>
+		<table border="1">
 			<tr>
 				{% for k in result_list.first.keys %}
 				<th>{{ k }}</th>

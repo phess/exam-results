@@ -1,0 +1,10 @@
+Enviar Report,Instituição,Data de recebimento,Número de registro,CPF,Nome,Data de Nascimento,Data da coleta,Material coletado,Data do início dos sintomas,Equipe extração,Kit extração,Equipe PCR,Máquina PCR,Resultado,Conclusão,Observação
+NO,Instituição A,08/08/20,123456,06699855569,Fulano de Tal,10/10/85,01/04/20,sangue,25/03/2020,Equipe A,Kit extração do time A,Equipe PCR do time A,Máquina PCR do time A,Positivo,Texto do resultado Positivo,-
+NO,Instituição A,08/08/20,123456,54544820269,Andre da Silva,10/10/85,01/04/20,sangue,25/03/2020,Equipe A,Kit extração do time A,Equipe PCR do time A,Máquina PCR do time A,Negativo,Texto do resultado Negativo,-
+NO,Instituição A,08/08/20,123456,54689752136,Juarez Peixoto,10/10/85,01/04/20,sangue,25/03/2020,Equipe B,Kit extração do time B,Equipe PCR do time B,Máquina PCR do time B,Positivo,Texto do resultado Positivo,-
+NO,Instituição B,08/08/20,123456,69856427893,Carlos Andre,10/10/85,01/04/20,sangue,25/03/2020,Equipe B,Kit extração do time B,Equipe PCR do time B,Máquina PCR do time B,Positivo,Texto do resultado Positivo,"Nada a declarar, todavia, umas virgulas para ajudar"
+NO,Instituição B,08/08/20,123456,24598745632,Jose Luiz,10/10/85,01/04/20,sangue,25/03/2020,Equipe B,Kit extração do time B,Equipe PCR do time B,Máquina PCR do time B,Negativo,Texto do resultado Negativo,-
+NO,Instituição B,08/08/20,123456,22255588896,Amorim ja Foi,10/10/85,01/04/20,sangue,25/03/2020,Equipe B,Kit extração do time B,Equipe PCR do time B,Máquina PCR do time B,Positivo,Texto do resultado Positivo,-
+NO,Instituição B,08/08/20,123456,36957412389,Josze Colmeia,10/10/85,01/04/20,sangue,25/03/2020,Equipe B,Kit extração do time B,Equipe PCR do time B,Máquina PCR do time B,Negativo,Texto do resultado Negativo,-
+NO,Instituição C,08/08/20,123456,85698742315,Catatau Amigo,10/10/85,01/04/20,sangue,25/03/2020,Equipe A,Kit extração do time A,Equipe PCR do time A,Máquina PCR do time A,Positivo,Texto do resultado Positivo,-
+NO,Instituição C,08/08/20,123456,98654723145,Josefina da Silva,10/10/85,01/04/20,sangue,25/03/2020,Equipe A,Kit extração do time A,Equipe PCR do time A,Máquina PCR do time A,Negativo,Texto do resultado Negativo,-

@@ -1,0 +1,25 @@
+@charset "utf-8";
+body {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 12px;
+}
+a:link {
+	text-decoration: none;
+	color: #cc3300;
+}
+a:visited {
+	text-decoration: none;
+	color: #cc3300;
+}
+a:hover {
+	text-decoration: none;
+	color: #cc3300;
+}
+a:active {
+	text-decoration: none;
+	color: #cc3300;
+}
+
+.tabela {
+	background-color: #d9c279;
+}

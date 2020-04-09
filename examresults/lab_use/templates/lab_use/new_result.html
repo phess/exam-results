@@ -1,9 +1,8 @@
-{% extends "lab_use/base.html" %}
-
-{% block title %}Digite um resultado novo{% endblock %}
+{% extends 'lab_use/base.html' %}
 
 {% block content %}
-		<form action="/commit_result/" method="post">
+		<h1>Digite um resultado novo</h1>
+		<form action="{% url 'add_result' %}" method="post">
 		{% csrf_token %}
 		<table>
 			<tr>

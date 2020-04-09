@@ -3,8 +3,13 @@ from . import views
 
 app_name = 'lab_use'
 urlpatterns = [
-        path('', views.IndexView.as_view(), name='index'),
-        path('report/', views.report),
-        path('sheet_upload/', views.sheet_upload, name='sheet_upload'),
-        path('new_upload/', views.sheet_upload, name='new_upload'),
+        path('', views.home_view),
+        path('home/', views.home_view),
+        path('report/', views.report_view),
+        path('new_result/', views.result_view, name='add_result'),
+        path('upload/', views.upload_view),
+        path('resend/', views.resend_view),
+        path('pdf_generate/', views.pdf_generate_view),
+        path('pdf_generate/<int:id>/', views.pdf_generate_view),
+
 ]
