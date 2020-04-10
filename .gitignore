@@ -1,0 +1,7 @@
+# exclude some files
+*.py[co]
+*.sw[po]
+*.bak
+*.orig
+*~
+*.sqlite*
