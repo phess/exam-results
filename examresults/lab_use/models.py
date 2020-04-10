@@ -24,6 +24,7 @@ class Institution(models.Model):
     city = models.CharField(max_length=100, default='I will set this later', blank=True)
     state = models.CharField(max_length=2, default='XX', blank=True)
     email = models.EmailField(blank=True)
+#     test_field = models.EmailField(blank=True)
 
     def __str__(self):
         return self.short_name
@@ -43,9 +44,10 @@ class ExamResult(models.Model):
     # sample_id = models.CharField(max_length=40)
     # exam_result = models.CharField(choices=RESULT_CHOICES, max_length=30)
     # exam_date = models.DateTimeField('date issued', auto_now_add=False)
-    # result_submitted = models.BooleanField()
+#     result_submitted = models.BooleanField()
 
     send_report = models.BooleanField()
+#     send_report_new = models.BooleanField()
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     sample_received = models.DateField('date received')
     sample_id = models.CharField(max_length=40)
@@ -71,3 +73,18 @@ class ExamResult(models.Model):
 #     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 # modificado. testing.
+
+class OverwriteStorage(FileSystemStorage):
+    '''
+    Muda o comportamento padrão do Django e o faz sobrescrever arquivos de
+    mesmo nome que foram carregados pelo usuário ao invés de renomeá-los.
+    '''
+    def get_available_name(self, name):
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
+
+class Media(models.Model):
+    name = models.CharField("Nome", max_length=128)
+#     media = models.FileField("Arquivo", upload_to=settings.MEDIA_ROOT, storage=OverwriteStorage())
+    media = models.FileField("Arquivo", upload_to="lab_use/media/", storage=OverwriteStorage())
