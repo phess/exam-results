@@ -1,5 +1,5 @@
 from django import forms
-from .models import Institution
+# from .models import Institution
 
 # class NewResultForm(forms.ModelForm):
 #     class Meta:

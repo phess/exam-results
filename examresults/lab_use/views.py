@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import ExamResult, Institution, SampleType
+from .models import ExamResult, SampleType
 from django.views import generic
 from django.template import loader
 from .forms import UploadSheetForm

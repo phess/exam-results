@@ -103,11 +103,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOCALE_PATHS = [ os.path.join(BASE_DIR, 'locale'), ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
