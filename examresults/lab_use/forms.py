@@ -6,7 +6,8 @@ from django import forms
 #         model = ExamResult
 #         fields = ['patient_full_name', 'institution', 'sample_received', 'sample_id', 'exam_result', 'exam_date']
 
+
 class UploadSheetForm(forms.Form):
-    #institution = Institution
-    #title = forms.CharField(max_length=50)
+    # institution = Institution
+    # title = forms.CharField(max_length=50)
     planilha = forms.FileField()

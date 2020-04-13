@@ -6,3 +6,4 @@
 *~
 *.sqlite*
 */migrations/*
+lab_use/media
