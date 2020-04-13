@@ -80,6 +80,19 @@ Once you proceed with changes on the `models.py`, proceed as below to update the
 (exam-results) [wpinheir@ironman examresults]$ ./manage.py migrate
 ```
 
+- If you would like to complement adding the translation to pt_BR, you should
+  - Run the command below to create the file `exam-results/examresults/locale/pt_BR/LC_MESSAGES/django.po`
+```
+(exam-results) [wpinheir@ironman examresults]$ ./manage.py makemessages
+```
+  - Add the entry related to your translation
+  - Run the commands below
+```
+(exam-results) [wpinheir@ironman examresults]$ ./manage.py compilemessages
+```
+After that, you should be able to see the translated text on your browser.
+
+
 I hope you enjoy it.
 
 Best

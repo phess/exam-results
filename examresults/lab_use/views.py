@@ -12,9 +12,6 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 
-
-
-
 def bulk_upload(request):
     pass
 
@@ -45,21 +42,21 @@ def process_sheet(f):
     }
 
     for row in reader:
-        #ret_list.append(row)
+        # ret_list.append(row)
         new_result = ExamResult()
-        for k,v in row.items():
+        for k, v in row.items():
             new_key = header_field_map[k]
             if new_key == 'sample_types':
                 new_value = []
                 for sub_value in v.split('/'):
-                    new_sub_value = SampleType.objects.get_or_create(name = sub_value)[0]
+                    new_sub_value = SampleType.objects.get_or_create(name=sub_value)[0]
                     # Adding sample_types can only be done once new_result has
                     # been committed to the DB and has an ID.
-                    #new_result.sample_types.add(new_value)
+                    # new_result.sample_types.add(new_value)
                     new_value.append(new_sub_value)
-                    add_after_save=True
+                    add_after_save = True
             elif new_key == 'institution':
-                inst = Institution.objects.get_or_create(short_name = v)
+                inst = Institution.objects.get_or_create(short_name=v)
                 new_result.institution = inst[0]
             elif 'day' in new_key or 'date' in new_key:
                 # If the last 4 characters are digits, then the format is
@@ -74,7 +71,6 @@ def process_sheet(f):
                     new_result.__dict__[new_key] = y_m_d
                 else:
                     new_result.__dict__[new_key] = v
-                    
             else:
                 new_result.__dict__[new_key] = v
 
@@ -85,7 +81,6 @@ def process_sheet(f):
                 new_result.sample_types.add(val)
 
     return new_result.__dict__
-
 
 
 def sheet_upload(request):
@@ -123,7 +118,7 @@ def new_result_with_post(request):
 def new_result(request):
     """Renders the new_result template, shows institution picker"""
     sorted_results = ExamResult.objects.order_by('-result_date')
-    results_institutions = [ r.institution for r in sorted_results ]
+    results_institutions = [r.institution for r in sorted_results]
     latest_institutions = []
     for inst in results_institutions:
         if inst not in latest_institutions:
@@ -138,7 +133,7 @@ def new_result(request):
             'all_institutions': all_institutions,
     }
     return render(request, 'lab_use/choose_institution.html', context)
-    #return HttpResponse('running new_result')
+    # return HttpResponse('running new_result')
 
 # def new_institution(request):
 #     """Creates new institution with POST data, renders new_result template"""
@@ -157,6 +152,7 @@ def new_result(request):
 #     #return render(request, 'lab_use/new_result.html', context)
 #     return redirect('/new_result/{}'.format(i.id))
 
+
 def report(request):
     pass
     # all_results = ExamResult.objects.order_by('-exam_date')
@@ -165,6 +161,7 @@ def report(request):
     #         'latest_five_results': latest_five_results,
     # }
     # return render(request, 'lab_use/report.html', context)
+
 
 def commit_result(request):
     pass
@@ -191,9 +188,10 @@ def commit_result(request):
 #         """Return the last 10 submitted results."""
 #         return ExamResult.objects.order_by('-exam_date')[:10]
 
+
 def result_view(request):
     return render(request, 'lab_use/new_result.html')
-    #return HttpResponse('running new_result')
+    # return HttpResponse('running new_result')
 
 # def report_view(request):
 #     all_results = ExamResult.objects.order_by('-exam_date')
@@ -204,6 +202,7 @@ def result_view(request):
 #     }
 #     return render(request, 'lab_use/report.html', context)
 
+
 def report_view(request):
     query_set = ExamResult.objects.all()
     context = {
@@ -211,27 +210,31 @@ def report_view(request):
     }
     return render(request, 'lab_use/report.html', context)
 
+
 def home_view(request):
     context = {}
-    return render(request,'lab_use/home.html', context)
+    return render(request, 'lab_use/home.html', context)
+
 
 def upload_view(request):
-    context={}
-    return render(request,'lab_use/upload.html', context)
+    context = {}
+    return render(request, 'lab_use/upload.html', context)
+
 
 def resend_view(request):
     query_set = ExamResult.objects.all()
     context = {
             'object_list': query_set
     }
-    return render(request,'lab_use/resend.html', context)
+    return render(request, 'lab_use/resend.html', context)
+
 
 def pdf_generate_view(request, id):
     query_set = ExamResult.objects.get(id=id)
     context = {
             'object_list': query_set
     }
-    return render(request,'lab_use/pdf_generate.html', context)
+    return render(request, 'lab_use/pdf_generate.html', context)
 
 
 def upload_view(request):
