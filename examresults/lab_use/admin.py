@@ -56,16 +56,16 @@ class ExamResultAdmin(admin.ModelAdmin):
               'extraction_team', 'extraction_kit', 'pcr_team',
               'pcr_machine', 'exam_result', 'conclusion',
               'obs'
-              )
+             )
     list_per_page = PER_PAGE
     list_display = ('lab', 'send_report', 'priority', 'sample_id',
                     'patient_full_name', 'exam_result'
-                    )
+                   )
     search_fields = ['patient_full_name']
     list_filter = ['lab', 'priority', 'send_report',
                    'exam_result', 'extraction_team', 'pcr_team',
                    'is_blood', 'is_swab', 'is_lavado'
-                   ]
+                  ]
 
 
 admin.site.register(ExamResult, ExamResultAdmin)

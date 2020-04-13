@@ -1,3 +1,6 @@
+"""
+Views
+"""
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import ExamResult, SampleType
@@ -13,32 +16,38 @@ from django.core.files.storage import FileSystemStorage
 
 
 def bulk_upload(request):
+    """
+    TODO
+    """
     pass
 
 
 def process_sheet(f):
+    """
+    TODO
+    """
     fcontents = f.read().decode('utf-8')
     infile = io.StringIO(fcontents)
     reader = csv.DictReader(infile, dialect='excel')
 
     header_field_map = {
-            # csv : model
-            'Instituição': 'institution',
-            'Data de recebimento': 'sample_receive_date',
-            'Número de registro': 'sample_id',
-            'CPF': 'patient_unique_id',
-            'Nome': 'patient_full_name',
-            'Data de Nascimento': 'patient_birthday',
-            'Data da coleta': 'sample_date',
-            'Material coletado': 'sample_types',
-            'Data do início dos sintomas': 'symptoms_start_date',
-            'Equipe extração': 'extraction_team',
-            'Kit extração': 'extraction_kit',
-            'Equipe PCR': 'pcr_team',
-            'Máquina PCR': 'pcr_equipment',
-            'Resultado': 'result',
-            'Conclusão': 'conclusion',
-            'Observação': 'notes',
+        # csv : model
+        'Instituição': 'institution',
+        'Data de recebimento': 'sample_receive_date',
+        'Número de registro': 'sample_id',
+        'CPF': 'patient_unique_id',
+        'Nome': 'patient_full_name',
+        'Data de Nascimento': 'patient_birthday',
+        'Data da coleta': 'sample_date',
+        'Material coletado': 'sample_types',
+        'Data do início dos sintomas': 'symptoms_start_date',
+        'Equipe extração': 'extraction_team',
+        'Kit extração': 'extraction_kit',
+        'Equipe PCR': 'pcr_team',
+        'Máquina PCR': 'pcr_equipment',
+        'Resultado': 'result',
+        'Conclusão': 'conclusion',
+        'Observação': 'notes',
     }
 
     for row in reader:
@@ -76,7 +85,7 @@ def process_sheet(f):
 
         new_result.save()
         if add_after_save:
-            add_after_save=False
+            add_after_save = False
             for val in new_value:
                 new_result.sample_types.add(val)
 
@@ -129,8 +138,8 @@ def new_result(request):
     all_institutions = Institution.objects.all()
 
     context = {
-            'latest_institutions': latest_institutions,
-            'all_institutions': all_institutions,
+        'latest_institutions': latest_institutions,
+        'all_institutions': all_institutions,
     }
     return render(request, 'lab_use/choose_institution.html', context)
     # return HttpResponse('running new_result')
@@ -154,6 +163,9 @@ def new_result(request):
 
 
 def report(request):
+    """
+    TODO
+    """
     pass
     # all_results = ExamResult.objects.order_by('-exam_date')
     # latest_five_results = [ (r.patient_full_name, r.result, r.exam_date) for r in all_results ][:5]
@@ -164,6 +176,9 @@ def report(request):
 
 
 def commit_result(request):
+    """
+    TODO
+    """
     pass
     # institution = get_object_or_404(Institution,
     #                                 pk=request.POST['institution_id'])
@@ -190,6 +205,9 @@ def commit_result(request):
 
 
 def result_view(request):
+    """
+    TODO
+    """
     return render(request, 'lab_use/new_result.html')
     # return HttpResponse('running new_result')
 
@@ -204,40 +222,58 @@ def result_view(request):
 
 
 def report_view(request):
+    """
+    TODO
+    """
     query_set = ExamResult.objects.all()
     context = {
-            'object_list': query_set
+        'object_list': query_set
     }
     return render(request, 'lab_use/report.html', context)
 
 
 def home_view(request):
+    """
+    TODO
+    """
     context = {}
     return render(request, 'lab_use/home.html', context)
 
 
 def upload_view(request):
+    """
+    TODO
+    """
     context = {}
     return render(request, 'lab_use/upload.html', context)
 
 
 def resend_view(request):
+    """
+    TODO
+    """
     query_set = ExamResult.objects.all()
     context = {
-            'object_list': query_set
+        'object_list': query_set
     }
     return render(request, 'lab_use/resend.html', context)
 
 
 def pdf_generate_view(request, id):
+    """
+    TODO
+    """
     query_set = ExamResult.objects.get(id=id)
     context = {
-            'object_list': query_set
+        'object_list': query_set
     }
     return render(request, 'lab_use/pdf_generate.html', context)
 
 
 def upload_view(request):
+    """
+    TODO
+    """
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
         fs = FileSystemStorage()
