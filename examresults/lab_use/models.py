@@ -59,6 +59,7 @@ class City(models.Model):
 class Laboratory(models.Model):
     short_name = models.SlugField(max_length=15)
     name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100, blank=True)
     city = models.ForeignKey(City, related_name='city',
                              on_delete=models.CASCADE,
                              help_text=_('Enter the city name'))
@@ -149,6 +150,13 @@ class ExamResult(models.Model):
     pcr_team = models.ForeignKey(PcrTeam, on_delete=models.CASCADE,
                                  blank=True, null=True)
     pcr_machine = models.CharField(max_length=200, blank=True)
+
+    result_target_E = models.CharField(max_length=20, blank=True)
+    result_target_P2 = models.CharField(max_length=20, blank=True)
+    result_target_N1 = models.CharField(max_length=20, blank=True)
+    result_target_N2 = models.CharField(max_length=20, blank=True)
+    result_target_RP = models.CharField(max_length=20, blank=True)
+
     exam_result = models.CharField(choices=RESULT_CHOICES, max_length=30, blank=True)
     conclusion = models.CharField(max_length=200, blank=True)
     obs = models.CharField(max_length=800, blank=True)

@@ -20,12 +20,28 @@
 				<td>Kit extração</td>
 				<td>Equipe PCR</td>
 				<td>Máquina PCR</td>
-				<td>Resultado</td>
+				<td>Resultado _E</td>
+				<td>Resultado _P2</td>
+				<td>Resultado _N1</td>
+				<td>Resultado _N2</td>
 				<td>Conclusão</td>
 				<td>Observação</td>
 			</tr>
 			{% comment %} {{ object_list }} {% endcomment %}
 			{% for instance in object_list %}
+				{% if "+" in instance.result_target_E %}
+				_E: {{ instance.result_target_E }}<p>
+				{% endif %}
+				{% if "+" in instance.result_target_P2 %}
+				_P2: {{ instance.result_target_P2 }}<p>
+				{% endif %}
+				{% if "+" in instance.result_target_N1 %}
+				_N1: {{ instance.result_target_N1 }}<p>
+				{% endif %}
+				{% if "+" in instance.result_target_N2 %}
+				_N2: {{ instance.result_target_N2 }}<p>
+				{% endif %}
+			
 				<tr>
 					<td>{{ instance.send_report }}</td>
 					<td>{{ instance.lab }}</td>
@@ -41,9 +57,14 @@
 					<td>{{ instance.extraction_kit }}</td>
 					<td>{{ instance.pcr_team }}</td>
 					<td>{{ instance.pcr_machine }}</td>
-					<td>{{ instance.exam_result }}</td>
+					<td>{{ instance.result_target_E }}</td>
+					<td>{{ instance.result_target_P2 }}</td>
+					<td>{{ instance.result_target_N1 }}</td>
+					<td>{{ instance.result_target_N2 }}</td>
+					{% comment %} <td>{{ instance.exam_result }}</td> {% endcomment %}
 					<td>{{ instance.conclusion }}</td>
 					<td>{{ instance.obs }}</td>
+					{% comment %} <td>{{ count }}</td> {% endcomment %}
 				</tr>
 			{% endfor %}
 

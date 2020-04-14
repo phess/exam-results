@@ -34,12 +34,12 @@ admin.site.register(City, CityAdmin)
 
 
 class LaboratoryAdmin(admin.ModelAdmin):
-    fields = ('name', 'short_name', 'city')
+    fields = ('name', 'short_name', 'email', 'city')
     ordering = ['name']
     search_fields = ['name', 'city__name', 'city__state__name']
     # raw_id_fields = ['state']
     list_per_page = PER_PAGE
-    list_display = ('name', 'short_name', 'city', 'state', 'created')
+    list_display = ('name', 'short_name', 'city', 'email', 'state', 'created')
     # list_filter = ['city__state']
     list_filter = ['city__state']
 
@@ -55,7 +55,8 @@ class ExamResultAdmin(admin.ModelAdmin):
               'beginning_symptoms',
               'extraction_team', 'extraction_kit', 'pcr_team',
               'pcr_machine', 'exam_result', 'conclusion',
-              'obs'
+              'result_target_P2', 'result_target_E', 'result_target_RP',
+              'result_target_N1', 'result_target_N2', 'obs'
              )
     list_per_page = PER_PAGE
     list_display = ('lab', 'send_report', 'priority', 'sample_id',
