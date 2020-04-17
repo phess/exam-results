@@ -1,10 +1,11 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
-from .models import (
-    ExamResult, SampleType,
-    State, City, Laboratory,
-    ExtractionTeam, PcrTeam
-)
+from .models import *
+#from .models import (
+#    ExamResult, SampleType,
+#    State, City, Laboratory,
+#    ExtractionTeam, PcrTeam
+#)
 
 admin.site.register(SampleType)
 
@@ -47,29 +48,29 @@ class LaboratoryAdmin(admin.ModelAdmin):
 admin.site.register(Laboratory, LaboratoryAdmin)
 
 
-class ExamResultAdmin(admin.ModelAdmin):
-    fields = ('send_report', 'priority',
-              'is_blood', 'is_swab', 'is_lavado', 'lab',
-              'sample_received', 'sample_id', 'patient_id',
-              'patient_full_name', 'dob_date', 'exam_date',
-              'beginning_symptoms',
-              'extraction_team', 'extraction_kit', 'pcr_team',
-              'pcr_machine', 'exam_result', 'conclusion',
-              'result_target_P2', 'result_target_E', 'result_target_RP',
-              'result_target_N1', 'result_target_N2', 'obs'
-             )
-    list_per_page = PER_PAGE
-    list_display = ('lab', 'send_report', 'priority', 'sample_id',
-                    'patient_full_name', 'exam_result'
-                   )
-    search_fields = ['patient_full_name']
-    list_filter = ['lab', 'priority', 'send_report',
-                   'exam_result', 'extraction_team', 'pcr_team',
-                   'is_blood', 'is_swab', 'is_lavado'
-                  ]
+#class ExamResultAdmin(admin.ModelAdmin):
+#    fields = ('send_report', 'priority',
+#              'is_blood', 'is_swab', 'is_lavado', 'lab',
+#              'sample_received', 'sample_id', 'patient_id',
+#              'patient_full_name', 'dob_date', 'exam_date',
+#              'beginning_symptoms',
+#              'extraction_team', 'extraction_kit', 'pcr_team',
+#              'pcr_machine', 'exam_result', 'conclusion',
+#              'result_target_P2', 'result_target_E', 'result_target_RP',
+#              'result_target_N1', 'result_target_N2', 'obs'
+#             )
+#    list_per_page = PER_PAGE
+#    list_display = ('lab', 'send_report', 'priority', 'sample_id',
+#                    'patient_full_name', 'exam_result'
+#                   )
+#    search_fields = ['patient_full_name']
+#    list_filter = ['lab', 'priority', 'send_report',
+#                   'exam_result', 'extraction_team', 'pcr_team',
+#                   'is_blood', 'is_swab', 'is_lavado'
+#                  ]
 
 
-admin.site.register(ExamResult, ExamResultAdmin)
+#admin.site.register(ExamResult, ExamResultAdmin)
 
 
 class ExtractionTeamAdmin(admin.ModelAdmin):
@@ -79,7 +80,7 @@ class ExtractionTeamAdmin(admin.ModelAdmin):
     list_filter = ['name', 'short_name']
 
 
-admin.site.register(ExtractionTeam, ExtractionTeamAdmin)
+#admin.site.register(ExtractionTeam, ExtractionTeamAdmin)
 
 
 class PcrTeamAdmin(admin.ModelAdmin):
@@ -89,4 +90,4 @@ class PcrTeamAdmin(admin.ModelAdmin):
     list_filter = ['name', 'short_name']
 
 
-admin.site.register(PcrTeam, PcrTeamAdmin)
+#admin.site.register(PcrTeam, PcrTeamAdmin)
