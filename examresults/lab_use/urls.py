@@ -18,9 +18,9 @@ urlpatterns = [
     
     path('start/', views.start),
     path('extraction/start/', views.start_extraction),
-    path('extraction/end/', views.end_extraction),
+    path('extraction/end/<int:id>/', views.end_extraction),
     path('extraction/view/<int:id>/', views.view_extraction),
     path('pcr/start/', views.start_pcr),
     path('pcr/view/<int:id>/', views.view_pcr),
-    path('pcr/end/', views.end_pcr),
+    path('pcr/end/<int:id>/', views.end_pcr),
 ]
