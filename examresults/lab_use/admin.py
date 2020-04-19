@@ -1,50 +1,110 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
-from .models import (
-    ExamResult, SampleType,
-    State, City, Laboratory,
-    ExtractionTeam, PcrTeam
-)
+# from .models import (
+#     ExamResult, SampleType,
+#     State, City, Laboratory,
+#     ExtractionTeam, PcrTeam
+# )
 
-admin.site.register(SampleType)
+# admin.site.register(SampleType)
+
+from .models import (
+    paciente, estado, cidade, laboratorio,
+    tipo_extracao, kit_extracao, maq_extracao, extracao, resultado_extracao,
+    tipo_alvo, maq_pcr, pcr, resultado_pcr,
+    tipo_amostra, amostra,
+    lab_email
+)
 
 PER_PAGE = 20
 
 
-class StateAdmin(admin.ModelAdmin):
-    fields = ('name', 'short_name')
-    ordering = ['name']
-    search_fields = ['name', 'short_name']
+admin.site.register(lab_email)
+
+
+admin.site.register(tipo_amostra)
+admin.site.register(amostra)
+
+admin.site.register(tipo_alvo)
+admin.site.register(maq_pcr)
+admin.site.register(pcr)
+admin.site.register(resultado_pcr)
+
+
+
+admin.site.register(tipo_extracao)
+admin.site.register(kit_extracao)
+admin.site.register(maq_extracao)
+admin.site.register(resultado_extracao)
+
+
+class extracaoAdmin(admin.ModelAdmin):
+    fields = ('nome_da_lista', 'tipo_extracao', 'kit_extracao',
+              'maq_extracao', 'resultado')
+    ordering = ['nome_da_lista', 'tipo_extracao', 'kit_extracao',
+                'maq_extracao']
+    search_fields = ['nome', 'email', 'cpf', 'dt_nascimento']
     list_per_page = PER_PAGE
-    list_display = ('name', 'short_name', 'created')
+    # list_display = ('nome', 'email', 'cpf', 'dt_nascimento')
+    list_display = ('nome_da_lista', 'tipo_extracao', 'kit_extracao',
+              'maq_extracao', 'resultado', 'dt_criacao')
 
 
-admin.site.register(State, StateAdmin)
+admin.site.register(extracao, extracaoAdmin)
 
 
-class CityAdmin(admin.ModelAdmin):
-    fields = ('name', 'state')
-    ordering = ['name']
-    search_fields = ['name', 'state__name']
+
+
+
+class pacienteAdmin(admin.ModelAdmin):
+    fields = ('nome', 'email', 'cpf', 'dt_nascimento')
+    ordering = ['nome']
+    search_fields = ['nome', 'email', 'cpf', 'dt_nascimento']
     list_per_page = PER_PAGE
-    list_display = ('name', 'state', 'created')
+    list_display = ('nome', 'email', 'cpf', 'dt_nascimento')
+    # list_filter = ['nome', 'email', 'cpf', 'dt_nascimento']
 
 
-admin.site.register(City, CityAdmin)
+admin.site.register(paciente, pacienteAdmin)
 
 
-class LaboratoryAdmin(admin.ModelAdmin):
-    fields = ('name', 'short_name', 'email', 'city')
-    ordering = ['name']
-    search_fields = ['name', 'city__name', 'city__state__name']
+
+
+# -----------------
+
+class estadoAdmin(admin.ModelAdmin):
+    fields = ('nome', 'sigla')
+    ordering = ['nome']
+    search_fields = ['nome', 'sigla']
+    list_per_page = PER_PAGE
+    list_display = ('nome', 'sigla', 'dt_criacao')
+
+admin.site.register(estado, estadoAdmin)
+
+
+class cidadeAdmin(admin.ModelAdmin):
+    fields = ('nome', 'estado')
+    ordering = ['nome']
+    search_fields = ['nome', 'estado__nome']
+    list_per_page = PER_PAGE
+    list_display = ('nome', 'estado', 'dt_criacao')
+
+admin.site.register(cidade, cidadeAdmin)
+
+
+class laboratorioAdmin(admin.ModelAdmin):
+    fields = ('nome', 'sigla', 'email', 'cidade')
+    ordering = ['nome']
+    # search_fields = ['nome', 'city__name', 'city__state__name']
+    search_fields = ['nome']
     # raw_id_fields = ['state']
     list_per_page = PER_PAGE
-    list_display = ('name', 'short_name', 'city', 'email', 'state', 'created')
+    # list_display = ('nome', 'sigla', 'cidade', 'estado', 'dt_criacao')
+    list_display = ('nome', 'sigla', 'email', 'cidade', 'dt_criacao')
     # list_filter = ['city__state']
-    list_filter = ['city__state']
+    # list_filter = ['city__state']
 
-
-admin.site.register(Laboratory, LaboratoryAdmin)
+admin.site.register(laboratorio, laboratorioAdmin)
 
 
 class ExamResultAdmin(admin.ModelAdmin):
@@ -69,7 +129,7 @@ class ExamResultAdmin(admin.ModelAdmin):
                   ]
 
 
-admin.site.register(ExamResult, ExamResultAdmin)
+# admin.site.register(ExamResult, ExamResultAdmin)
 
 
 class ExtractionTeamAdmin(admin.ModelAdmin):
@@ -79,7 +139,7 @@ class ExtractionTeamAdmin(admin.ModelAdmin):
     list_filter = ['name', 'short_name']
 
 
-admin.site.register(ExtractionTeam, ExtractionTeamAdmin)
+# admin.site.register(ExtractionTeam, ExtractionTeamAdmin)
 
 
 class PcrTeamAdmin(admin.ModelAdmin):
@@ -89,4 +149,4 @@ class PcrTeamAdmin(admin.ModelAdmin):
     list_filter = ['name', 'short_name']
 
 
-admin.site.register(PcrTeam, PcrTeamAdmin)
+# admin.site.register(PcrTeam, PcrTeamAdmin)
