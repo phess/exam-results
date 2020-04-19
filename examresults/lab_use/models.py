@@ -16,7 +16,11 @@ COLLECTED_MATERIAL = (
         ('lavado', 'lavado'),
 )
 
-EXT_EVENT_CHOICES = ( 'not started', 'started', 'finished' )
+EXT_EVENT_CHOICES = ( 
+        ( 'not started', 'não iniciado'),
+        ( 'started', 'iniciado' ),
+        ('finished', 'terminado' ),
+)
 
 class State(models.Model):
     name = models.CharField(_('State'), max_length=50, db_index=True,
@@ -192,7 +196,7 @@ class Event(models.Model):
     sample_list = models.ManyToManyField(Sample)
     start_time = models.DateTimeField(auto_now_add=True, null=True)
     end_time = models.DateTimeField(auto_now_add=False, null=True)
-    status = models.CharField(max_length=10, choices=EXT_EVENT_CHOICES, blank=True)
+    status = models.CharField(max_length=20, choices=EXT_EVENT_CHOICES, blank=True)
     
     def __str__(self):
         return self.last_status_change()
@@ -255,7 +259,7 @@ class ExtractionEvent(Event):
     #end_time = models.DateTimeField(auto_now_add=False, null=True)
     extraction_kit = models.ForeignKey(ExtractionKit, null=True, on_delete=models.CASCADE)
     #status = models.CharField(max_length=10, choices=EXT_EVENT_CHOICES, blank=True)
-    machine = models.CharField(ExtractionMachine)
+    machine = models.ForeignKey(ExtractionMachine, null=True, on_delete=models.CASCADE)
     
     #def __str__(self):
     #    return "{} {} at {}".format(self.machine, self.status, self.modified_time())
