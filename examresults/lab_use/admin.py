@@ -13,10 +13,36 @@ from .models import (
     tipo_extracao, kit_extracao, maq_extracao, extracao, resultado_extracao,
     tipo_alvo, maq_pcr, pcr, resultado_pcr,
     tipo_amostra, amostra,
-    lab_email
+    lab_email,
+    Question, Answer
 )
 
+class Answer1TabularInline(admin.TabularInline):
+    model = Answer
+
+class QuestionAdmin(admin.ModelAdmin):
+    inlines = [Answer1TabularInline]
+    class Meta:
+        model = Question
+
+admin.site.register(Question, QuestionAdmin)
+
+
+admin.site.register(Answer)
+
+
+
 PER_PAGE = 20
+
+
+class pcrInline(admin.TabularInline):
+    model = pcr
+    # extra
+
+class resultado_pcrAdmin(admin.ModelAdmin):
+    inlines = [
+        pcrInline,
+    ]
 
 
 admin.site.register(lab_email)
@@ -35,7 +61,19 @@ admin.site.register(resultado_pcr)
 admin.site.register(tipo_extracao)
 admin.site.register(kit_extracao)
 admin.site.register(maq_extracao)
-admin.site.register(resultado_extracao)
+
+# class resultado_extracaoTabularInline(admin.TabularInline):
+#     model = resultado_extracao
+
+
+class resultado_extracaoAdmin(admin.ModelAdmin):
+    # inlines = [resultado_extracaoTabularInline]
+
+    class Meta:
+        model = amostra
+
+admin.site.register(resultado_extracao, resultado_extracaoAdmin)
+
 
 
 class extracaoAdmin(admin.ModelAdmin):
@@ -49,6 +87,8 @@ class extracaoAdmin(admin.ModelAdmin):
     list_display = ('nome_da_lista', 'tipo_extracao', 'kit_extracao',
               'maq_extracao', 'resultado', 'dt_criacao')
 
+    # class Meta:
+    #     model = amostra
 
 admin.site.register(extracao, extracaoAdmin)
 

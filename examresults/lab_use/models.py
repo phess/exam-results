@@ -6,6 +6,28 @@ from django.utils.translation import gettext_lazy as _
 from multiselectfield import MultiSelectField
 
 
+
+class Question(models.Model):
+    text = models.TextField()
+    active = models.BooleanField(default=True)
+    draft = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.text[:10]
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    text = models.CharField(max_length=50)
+    active = models.BooleanField(default=True)
+    draft = models.BooleanField(default=False)
+    new_field = models.CharField(max_length=50)
+
+
+    def __str__(self):
+        return self.text[:10]
+
+
+
 class estado(models.Model):
     nome = models.CharField(_('Estado'), max_length=50, db_index=True,
                             help_text=_('Defina o Estado'))
