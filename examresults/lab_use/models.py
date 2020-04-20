@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from multiselectfield import MultiSelectField
+# from multiselectfield import MultiSelectField
 
 
 
