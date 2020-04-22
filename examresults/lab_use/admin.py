@@ -9,11 +9,11 @@ from django.contrib import admin
 # admin.site.register(SampleType)
 
 from .models import (
-    paciente, estado, cidade, laboratorio,
-    tipo_extracao, kit_extracao, maq_extracao, extracao, resultado_extracao,
-    tipo_alvo, maq_pcr, pcr, resultado_pcr,
-    tipo_amostra, amostra,
-    lab_email,
+    Paciente, Estado, Cidade, Laboratorio,
+    TipoExtracao, KitExtracao, MaqExtracao, Extracao, ResultadoExtracao,
+    TipoAlvo, MaqPcr, Pcr, ResultadoPcr,
+    TipoAmostra, Amostra, Sintoma,
+    LabEmail,
     Question, Answer
 )
 
@@ -27,16 +27,15 @@ class QuestionAdmin(admin.ModelAdmin):
 
 admin.site.register(Question, QuestionAdmin)
 
+admin.site.register(Sintoma)
 
 admin.site.register(Answer)
-
-
 
 PER_PAGE = 20
 
 
 class pcrInline(admin.TabularInline):
-    model = pcr
+    model = Pcr
     # extra
 
 class resultado_pcrAdmin(admin.ModelAdmin):
@@ -45,52 +44,62 @@ class resultado_pcrAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(lab_email)
+admin.site.register(LabEmail)
 
 
-admin.site.register(tipo_amostra)
-admin.site.register(amostra)
+admin.site.register(TipoAmostra)
+admin.site.register(Amostra)
 
-admin.site.register(tipo_alvo)
-admin.site.register(maq_pcr)
-admin.site.register(pcr)
-admin.site.register(resultado_pcr)
+admin.site.register(TipoAlvo)
+admin.site.register(MaqPcr)
+admin.site.register(Pcr)
+admin.site.register(ResultadoPcr)
 
 
 
-admin.site.register(tipo_extracao)
-admin.site.register(kit_extracao)
-admin.site.register(maq_extracao)
+admin.site.register(TipoExtracao)
+admin.site.register(KitExtracao)
+admin.site.register(MaqExtracao)
 
 # class resultado_extracaoTabularInline(admin.TabularInline):
 #     model = resultado_extracao
 
 
-class resultado_extracaoAdmin(admin.ModelAdmin):
+# class ExtracaoTabularInline(admin.TabularInline):
+#     model = extracao
+
+class ResultadoExtracaoAdmin(admin.ModelAdmin):
+    # inlines = [ExtracaoTabularInline]
+    # class Meta:
+    #     model = resultado_extracao
+
+    fields = ('amostra', 'extracao', 'resultado')
+    list_display = ('amostra', 'extracao', 'resultado')
+    list_filter = ['amostra', 'extracao', 'resultado']
     # inlines = [resultado_extracaoTabularInline]
 
-    class Meta:
-        model = amostra
+    # class Meta:
+    #     model = amostra
 
-admin.site.register(resultado_extracao, resultado_extracaoAdmin)
+admin.site.register(ResultadoExtracao, ResultadoExtracaoAdmin)
 
 
 
 class extracaoAdmin(admin.ModelAdmin):
     fields = ('nome_da_lista', 'tipo_extracao', 'kit_extracao',
-              'maq_extracao', 'resultado')
+              'maq_extracao',)
     ordering = ['nome_da_lista', 'tipo_extracao', 'kit_extracao',
                 'maq_extracao']
     search_fields = ['nome', 'email', 'cpf', 'dt_nascimento']
     list_per_page = PER_PAGE
     # list_display = ('nome', 'email', 'cpf', 'dt_nascimento')
     list_display = ('nome_da_lista', 'tipo_extracao', 'kit_extracao',
-              'maq_extracao', 'resultado', 'dt_criacao')
+              'maq_extracao', 'dt_criacao')
 
     # class Meta:
     #     model = amostra
 
-admin.site.register(extracao, extracaoAdmin)
+admin.site.register(Extracao, extracaoAdmin)
 
 
 
@@ -105,7 +114,7 @@ class pacienteAdmin(admin.ModelAdmin):
     # list_filter = ['nome', 'email', 'cpf', 'dt_nascimento']
 
 
-admin.site.register(paciente, pacienteAdmin)
+admin.site.register(Paciente, pacienteAdmin)
 
 
 
@@ -119,7 +128,7 @@ class estadoAdmin(admin.ModelAdmin):
     list_per_page = PER_PAGE
     list_display = ('nome', 'sigla', 'dt_criacao')
 
-admin.site.register(estado, estadoAdmin)
+admin.site.register(Estado, estadoAdmin)
 
 
 class cidadeAdmin(admin.ModelAdmin):
@@ -129,7 +138,7 @@ class cidadeAdmin(admin.ModelAdmin):
     list_per_page = PER_PAGE
     list_display = ('nome', 'estado', 'dt_criacao')
 
-admin.site.register(cidade, cidadeAdmin)
+admin.site.register(Cidade, cidadeAdmin)
 
 
 class laboratorioAdmin(admin.ModelAdmin):
@@ -144,7 +153,7 @@ class laboratorioAdmin(admin.ModelAdmin):
     # list_filter = ['city__state']
     # list_filter = ['city__state']
 
-admin.site.register(laboratorio, laboratorioAdmin)
+admin.site.register(Laboratorio, laboratorioAdmin)
 
 
 class ExamResultAdmin(admin.ModelAdmin):

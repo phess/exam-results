@@ -3,8 +3,6 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-# from multiselectfield import MultiSelectField
-
 
 
 class Question(models.Model):
@@ -22,13 +20,12 @@ class Answer(models.Model):
     draft = models.BooleanField(default=False)
     new_field = models.CharField(max_length=50)
 
-
     def __str__(self):
         return self.text[:10]
 
 
 
-class estado(models.Model):
+class Estado(models.Model):
     nome = models.CharField(_('Estado'), max_length=50, db_index=True,
                             help_text=_('Defina o Estado'))
     sigla = models.CharField(_('Sigla'), max_length=5,
@@ -45,8 +42,8 @@ class estado(models.Model):
 #         ordering = ['name']
 
 
-class cidade(models.Model):
-    estado = models.ForeignKey(estado, related_name='estado',
+class Cidade(models.Model):
+    estado = models.ForeignKey(Estado, related_name='estado',
                               on_delete=models.CASCADE)
     nome = models.CharField(_('Cidade'), max_length=100, db_index=True,
                             help_text=_('Informe o nome da cidade'))
@@ -63,7 +60,7 @@ class cidade(models.Model):
 #         unique_together = ('name', 'state')
 
 
-class lab_email(models.Model):
+class LabEmail(models.Model):
     email = models.CharField(_('Email'), max_length=100, db_index=True,
                             help_text=_('Informe o email'))
 
@@ -71,7 +68,7 @@ class lab_email(models.Model):
         return f'{self.email}'
     
 
-class laboratorio(models.Model):
+class Laboratorio(models.Model):
     RESULT_CHOICES = (
         ('positive', 'POS'),
         ('negative', 'NEG'),
@@ -95,7 +92,7 @@ class laboratorio(models.Model):
 
 
 
-    cidade = models.ForeignKey(cidade, related_name='cidade',
+    cidade = models.ForeignKey(Cidade, related_name='cidade',
                              on_delete=models.CASCADE,
                              help_text=_('Nome da Cidade'))
     dt_criacao = models.DateTimeField(_('Criado em'), auto_now_add=True)
@@ -137,7 +134,7 @@ class laboratorio(models.Model):
 
 # Inicio Paciente
 
-class paciente(models.Model):
+class Paciente(models.Model):
     nome = models.CharField(_('Nome'), max_length=50, db_index=True,
                             help_text=_('Nome do Paciente'), blank=True)
     email = models.CharField(_('Email'), max_length=50, db_index=True,
@@ -160,7 +157,7 @@ class paciente(models.Model):
 
 # Inicio Amostra
 
-class tipo_amostra(models.Model):
+class TipoAmostra(models.Model):
     nome = models.CharField(_('Tipo de Amostra'), max_length=50, db_index=True,
                             help_text=_('Tipo de Amostra'), blank=True, null=True)
 
@@ -169,23 +166,35 @@ class tipo_amostra(models.Model):
 
     def __str__(self):
         return f'{self.nome}, {self.sigla}'
-    
 
-class amostra(models.Model):
-    cod_amostra = models.CharField(_('Código da Amostra'), max_length=50, db_index=True,
-                            help_text=_('Código da Amostra'), primary_key=True)
+class Sintoma(models.Model):
+    nome = models.CharField(_('Sintoma'), max_length=50, db_index=True,
+                            help_text=_('Tipo de Sintoma'), blank=True, null=True)
 
-    paciente = models.ForeignKey(paciente,
+    # status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.nome}' 
+
+
+class Amostra(models.Model):
+    # cod_amostra = models.CharField(_('Código da Amostra'), max_length=50, db_index=True,
+    #                         help_text=_('Código da Amostra'), primary_key=True)
+
+    cod_amostra = models.AutoField(primary_key=True)
+
+    paciente = models.ForeignKey(Paciente,
                              on_delete=models.CASCADE,
                              help_text=_('Paciente'))
 
-    tipo_amostra = models.ForeignKey(tipo_amostra,
+    tipo_amostra = models.ForeignKey(TipoAmostra,
                              on_delete=models.CASCADE,
                              help_text=_('Tipo de Amostra'))
 
-    laboratorio = models.ForeignKey(laboratorio,
+    laboratorio = models.ForeignKey(Laboratorio,
                              on_delete=models.CASCADE,
                              help_text=_('Laboratorio'))
+
 
     dt_coleta = models.DateField(_('Data da Coleta'), blank=True, null=True)
     dt_inicial_sintoma = models.DateField(_('Data Inicial dos Sintomas'), blank=True, null=True)
@@ -194,16 +203,20 @@ class amostra(models.Model):
                             help_text=_('Descrição'), blank=True, null=True)
 
 
-    febre = models.BooleanField(default=False)
-    tosse = models.BooleanField(default=False)
-    dor_de_garganta = models.BooleanField(default=False)
-    dispneia = models.BooleanField(default=False)
-    desconforto_respiratorio = models.BooleanField(default=False)
-    saturacao_95 = models.BooleanField(default=False)
-    diarreia = models.BooleanField(default=False)
-    vomito = models.BooleanField(default=False)
+    # febre = models.BooleanField(default=False)
+    # tosse = models.BooleanField(default=False)
+    # dor_de_garganta = models.BooleanField(default=False)
+    # dispneia = models.BooleanField(default=False)
+    # desconforto_respiratorio = models.BooleanField(default=False)
+    # saturacao_95 = models.BooleanField(default=False)
+    # diarreia = models.BooleanField(default=False)
+    # vomito = models.BooleanField(default=False)
 
-
+    sintoma = models.ManyToManyField(Sintoma,
+                             related_name='amostra_sintoma',
+                             verbose_name='Sintoma do paciente',
+                             help_text=_('Sintoma'),
+                             blank=True)
 
     resultado = models.CharField(_('Resultado'), max_length=50, db_index=True,
                             help_text=_('Resultado'), blank=True, null=True)
@@ -230,7 +243,7 @@ class amostra(models.Model):
 
 # Inicio PCR
 
-class tipo_alvo(models.Model):
+class TipoAlvo(models.Model):
     sigla = models.CharField(_('Tipo do Alvo'), max_length=50, db_index=True,
                             help_text=_('Tipo do Alvo'), blank=True, null=True)
 
@@ -242,7 +255,7 @@ class tipo_alvo(models.Model):
         return f'{self.sigla},{self.descricao}'
     
 
-class maq_pcr(models.Model):
+class MaqPcr(models.Model):
     nome = models.CharField(_('Termociclador'), max_length=50, db_index=True,
                             help_text=_('Termociclador'), blank=True, null=True)
 
@@ -251,8 +264,8 @@ class maq_pcr(models.Model):
 
 # class resultado_pcr(models.Model):
 
-class resultado_pcr(models.Model):
-    amostra = models.ForeignKey(amostra,
+class ResultadoPcr(models.Model):
+    amostra = models.ForeignKey(Amostra,
                              on_delete=models.CASCADE,
                              help_text=_('Amostra'))
 
@@ -264,25 +277,25 @@ class resultado_pcr(models.Model):
         return "Amostras Aqui"
 
 
-class pcr(models.Model):
+class Pcr(models.Model):
     nome_da_tabela = models.CharField(_('Tabela do PCR'), max_length=50, db_index=True,
                             help_text=_('Tabela do PCR'))
 
     dt_criacao = models.DateTimeField(_('Criado em'), auto_now_add=True)
 
-    primeiro_alvo = models.ForeignKey(tipo_alvo, related_name='primeiro_alvo',
+    primeiro_alvo = models.ForeignKey(TipoAlvo, related_name='primeiro_alvo',
                              on_delete=models.CASCADE,
                              help_text=_('Primeiro Alvo'))
 
-    segundo_alvo = models.ForeignKey(tipo_alvo, related_name='segundo_alvo',
+    segundo_alvo = models.ForeignKey(TipoAlvo, related_name='segundo_alvo',
                              on_delete=models.CASCADE,
                              help_text=_('Segungo Alvo'))
 
-    maq_pcr = models.ForeignKey(maq_pcr,
+    maq_pcr = models.ForeignKey(MaqPcr,
                              on_delete=models.CASCADE,
                              help_text=_('Máquina do PCR'))
 
-    resultado = models.ForeignKey(resultado_pcr,
+    resultado = models.ForeignKey(ResultadoPcr,
                              on_delete=models.CASCADE,
                              help_text=_('Resultado do PCR'))
 
@@ -300,7 +313,7 @@ class pcr(models.Model):
 
 # Inicio Extracao
 
-class tipo_extracao(models.Model):
+class TipoExtracao(models.Model):
     tipo = models.CharField(_('Tipo de Extração'), max_length=50, db_index=True,
                             help_text=_('Tipo de Extração'), blank=True)
 
@@ -308,7 +321,7 @@ class tipo_extracao(models.Model):
         return f'{self.tipo}'
     
 
-class kit_extracao(models.Model):
+class KitExtracao(models.Model):
     nome = models.CharField(_('Kit de Extração'), max_length=50, db_index=True,
                             help_text=_('Kit de Extração'), blank=True, null=True)
     cod_kit = models.CharField(_('Código do Kit de Extração'), max_length=50, db_index=True,
@@ -318,49 +331,62 @@ class kit_extracao(models.Model):
         return f'{self.nome}'
 
 
-class maq_extracao(models.Model):
+class MaqExtracao(models.Model):
     nome = models.CharField(_('Maquina de Extração'), max_length=50, db_index=True,
                             help_text=_('Maquina de Extração'), blank=True, null=True)
 
     def __str__(self):
         return f'{self.nome}'
 
-class resultado_extracao(models.Model):
-    amostra = models.ForeignKey(amostra,
-                             on_delete=models.CASCADE,
-                             help_text=_('Amostra'))
-
-
-    resultado = models.CharField(_('Resultado da Extração'), max_length=50, db_index=True,
-                            help_text=_('Resultado da Extração'), blank=True)
-    
-    def __str__(self):
-        return "Amostras Aqui"
     
 
-class extracao(models.Model):
+class Extracao(models.Model):
     nome_da_lista = models.CharField(_('Lista de Extração'), max_length=50, db_index=True,
                             help_text=_('Lista de Extração'))
 
     dt_criacao = models.DateTimeField(_('Criado em'), auto_now_add=True)
 
-    tipo_extracao = models.ForeignKey(tipo_extracao,
+    # amostra = model.ManyToManyField()
+    amostra = models.ManyToManyField(Amostra,
+                             related_name='extracao_amostra',
+                             verbose_name='Amostra',
+                             help_text=_('Amostra'))    
+
+    tipo_extracao = models.ForeignKey(TipoExtracao,
                              on_delete=models.CASCADE,
                              help_text=_('Tipo de Extracao'))
 
-    kit_extracao = models.ForeignKey(kit_extracao,
+    kit_extracao = models.ForeignKey(KitExtracao,
                              on_delete=models.CASCADE,
                              help_text=_('Kit de Extracao'))
 
-    maq_extracao = models.ForeignKey(maq_extracao,
+    maq_extracao = models.ForeignKey(MaqExtracao,
                              on_delete=models.CASCADE,
                              help_text=_('Máquina de Extracao'))
 
-    resultado = models.ForeignKey(resultado_extracao,
+    # resultado_extracao = models.ForeignKey('resultado_extracao', related_name='resultado_aux',
+    #                          on_delete=models.CASCADE,
+    #                          help_text=_('Resultado da Extracao'))
+
+    def __str__(self):
+        return f'{self.nome_da_lista}'
+    
+
+
+class ResultadoExtracao(models.Model):
+    amostra = models.ForeignKey(Amostra,
                              on_delete=models.CASCADE,
-                             help_text=_('Resultado da Extracao'))
+                             help_text=_('Amostra'))
 
+    extracao = models.ForeignKey(Extracao,related_name='extracao',
+                             on_delete=models.CASCADE,
+                             help_text=_('Extracao'))
 
+    resultado = models.CharField(_('Resultado da Extração'), max_length=50, db_index=True,
+                            help_text=_('Resultado da Extração'), blank=True)
+    
+    def __str__(self):
+        return f'{self.id}'
 
 
 
