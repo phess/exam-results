@@ -241,6 +241,71 @@ class Amostra(models.Model):
 
 
 
+# # Inicio PCR
+
+# class TipoAlvo(models.Model):
+#     sigla = models.CharField(_('Tipo do Alvo'), max_length=50, db_index=True,
+#                             help_text=_('Tipo do Alvo'), blank=True, null=True)
+
+#     descricao = models.CharField(_('Descrição do Alvo'), max_length=50, db_index=True,
+#                             help_text=_('Descrição do Alvo'), blank=True, null=True)
+
+
+#     def __str__(self):
+#         return f'{self.sigla},{self.descricao}'
+    
+
+# class MaqPcr(models.Model):
+#     nome = models.CharField(_('Termociclador'), max_length=50, db_index=True,
+#                             help_text=_('Termociclador'), blank=True, null=True)
+
+#     def __str__(self):
+#         return f'{self.nome}'
+
+# # class resultado_pcr(models.Model):
+
+# class ResultadoPcr(models.Model):
+#     amostra = models.ForeignKey(Amostra,
+#                              on_delete=models.CASCADE,
+#                              help_text=_('Amostra'))
+
+
+#     resultado = models.CharField(_('Resultado do PCR'), max_length=50, db_index=True,
+#                             help_text=_('Resultado do PCR'), blank=True)
+    
+#     def __str__(self):
+#         return "Amostras Aqui"
+
+
+# class Pcr(models.Model):
+#     nome_da_tabela = models.CharField(_('Tabela do PCR'), max_length=50, db_index=True,
+#                             help_text=_('Tabela do PCR'))
+
+#     dt_criacao = models.DateTimeField(_('Criado em'), auto_now_add=True)
+
+#     primeiro_alvo = models.ForeignKey(TipoAlvo, related_name='primeiro_alvo',
+#                              on_delete=models.CASCADE,
+#                              help_text=_('Primeiro Alvo'))
+
+#     segundo_alvo = models.ForeignKey(TipoAlvo, related_name='segundo_alvo',
+#                              on_delete=models.CASCADE,
+#                              help_text=_('Segungo Alvo'))
+
+#     maq_pcr = models.ForeignKey(MaqPcr,
+#                              on_delete=models.CASCADE,
+#                              help_text=_('Máquina do PCR'))
+
+#     resultado = models.ForeignKey(ResultadoPcr,
+#                              on_delete=models.CASCADE,
+#                              help_text=_('Resultado do PCR'))
+
+#     def __str__(self):
+#         return f'{self.nome_da_tabela}'
+    
+
+# # Fim PCR
+
+
 # Inicio PCR
 
 class TipoAlvo(models.Model):
@@ -253,7 +318,7 @@ class TipoAlvo(models.Model):
 
     def __str__(self):
         return f'{self.sigla},{self.descricao}'
-    
+
 
 class MaqPcr(models.Model):
     nome = models.CharField(_('Termociclador'), max_length=50, db_index=True,
@@ -262,52 +327,68 @@ class MaqPcr(models.Model):
     def __str__(self):
         return f'{self.nome}'
 
-# class resultado_pcr(models.Model):
+    
+
+class Pcr(models.Model):
+    nome_da_tabela = models.CharField(_('Nome da Tabela PCR'), max_length=50, db_index=True,
+                            help_text=_('Nome da Tabela PCR'))
+
+    dt_criacao = models.DateTimeField(_('Criado em'), auto_now_add=True)
+
+    # amostra = model.ManyToManyField()
+    amostra = models.ManyToManyField(Amostra,
+                             related_name='pcr_resultadoextracao',
+                             verbose_name='ResultadoExtracao',
+                             help_text=_('ResultadoExtracao'))    
+
+    tipo_alvo_1 = models.ForeignKey(TipoAlvo,
+                             related_name='tipo_alvo_1',
+                             on_delete=models.CASCADE,
+                             help_text=_('Primeiro Alvo'))
+
+    tipo_alvo_2 = models.ForeignKey(TipoAlvo,
+                             related_name='tipo_alvo_2',
+                             on_delete=models.CASCADE,
+                             help_text=_('Segundo Alvo'))
+
+
+    maq_pcr = models.ForeignKey(MaqPcr,
+                             on_delete=models.CASCADE,
+                             help_text=_('Termociclador'))
+
+    # resultado_extracao = models.ForeignKey('resultado_extracao', related_name='resultado_aux',
+    #                          on_delete=models.CASCADE,
+    #                          help_text=_('Resultado da Extracao'))
+
+    def __str__(self):
+        return f'{self.nome_da_tabela}'
+
+
 
 class ResultadoPcr(models.Model):
     amostra = models.ForeignKey(Amostra,
                              on_delete=models.CASCADE,
-                             help_text=_('Amostra'))
+                             help_text=_('Amostra da Extracao'))
 
+    # extracao = models.ForeignKey(Extracao,related_name='extracao',
+    #                          on_delete=models.CASCADE,
+    #                          help_text=_('Extracao'))
 
-    resultado = models.CharField(_('Resultado do PCR'), max_length=50, db_index=True,
-                            help_text=_('Resultado do PCR'), blank=True)
-    
-    def __str__(self):
-        return "Amostras Aqui"
+    resultado_n1 = models.CharField(_('Resultado do primeiro alvo'), max_length=50, db_index=True,
+                            help_text=_('Resultado do primeiro alvo'), blank=True)
 
+    resultado_n2 = models.CharField(_('Resultado do segundo alvo'), max_length=50, db_index=True,
+                            help_text=_('Resultado do segundo alvo'), blank=True)
 
-class Pcr(models.Model):
-    nome_da_tabela = models.CharField(_('Tabela do PCR'), max_length=50, db_index=True,
-                            help_text=_('Tabela do PCR'))
-
-    dt_criacao = models.DateTimeField(_('Criado em'), auto_now_add=True)
-
-    primeiro_alvo = models.ForeignKey(TipoAlvo, related_name='primeiro_alvo',
-                             on_delete=models.CASCADE,
-                             help_text=_('Primeiro Alvo'))
-
-    segundo_alvo = models.ForeignKey(TipoAlvo, related_name='segundo_alvo',
-                             on_delete=models.CASCADE,
-                             help_text=_('Segungo Alvo'))
-
-    maq_pcr = models.ForeignKey(MaqPcr,
-                             on_delete=models.CASCADE,
-                             help_text=_('Máquina do PCR'))
-
-    resultado = models.ForeignKey(ResultadoPcr,
-                             on_delete=models.CASCADE,
-                             help_text=_('Resultado do PCR'))
+    resultado_rp = models.CharField(_('Resultado do RP'), max_length=50, db_index=True,
+                            help_text=_('Resultado do RP'), blank=True)
 
     def __str__(self):
-        return f'{self.nome_da_tabela}'
-    
+        return f'{self.id}'
+
+
 
 # Fim PCR
-
-
-
-
 
 
 

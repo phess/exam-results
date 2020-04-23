@@ -53,7 +53,6 @@ admin.site.register(Amostra)
 admin.site.register(TipoAlvo)
 admin.site.register(MaqPcr)
 admin.site.register(Pcr)
-admin.site.register(ResultadoPcr)
 
 
 
@@ -61,12 +60,25 @@ admin.site.register(TipoExtracao)
 admin.site.register(KitExtracao)
 admin.site.register(MaqExtracao)
 
+
 # class resultado_extracaoTabularInline(admin.TabularInline):
 #     model = resultado_extracao
 
 
 # class ExtracaoTabularInline(admin.TabularInline):
 #     model = extracao
+
+class ResultadoPcrAdmin(admin.ModelAdmin):
+    # inlines = [ExtracaoTabularInline]
+    # class Meta:
+    #     model = resultado_extracao
+
+    fields = ('amostra', 'resultado_n1', 'resultado_n2', 'resultado_rp')
+    list_display = ('amostra', 'resultado_n1', 'resultado_n2', 'resultado_rp')
+    list_filter = ['amostra', 'resultado_n1', 'resultado_n2', 'resultado_rp']
+
+admin.site.register(ResultadoPcr, ResultadoPcrAdmin)
+
 
 class ResultadoExtracaoAdmin(admin.ModelAdmin):
     # inlines = [ExtracaoTabularInline]
