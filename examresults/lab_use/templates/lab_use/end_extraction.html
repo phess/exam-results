@@ -1,0 +1,31 @@
+{% extends "lab_use/base.html" %}
+
+{% block title %}Fim da extração{% endblock %}
+
+{% block content %}
+		<h1>Selecione amostras para re-extração ou para entrar na fila de PCR</h1>
+		<form action="/extraction/" method="post">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<th>Finalizar<th>
+				<th>Máquina</th>
+				<th>Hora de início</th>
+				<th>Amostras</th>
+			</tr>
+			{% for ext in ext_list %}
+			<tr>
+				<td><input type="checkbox" id="{{ ext.id }}" name="{{ ext.id }}" value="True" /></td>
+				<td>{{ ext.machine }}</td>
+				<td>{{ ext.start_time }}</td>
+				<td>
+				{% for sample in ext.sample_list.all %}
+				{{ sample.sample_id }}<br/>{% endfor %}
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<input type="submit" value="Extrair"/>
+		</form>
+
+{% endblock %}

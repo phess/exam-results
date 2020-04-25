@@ -7,7 +7,7 @@ from .models import *
 #    ExtractionTeam, PcrTeam
 #)
 
-admin.site.register(SampleType)
+#admin.site.register(SampleType)
 
 PER_PAGE = 20
 
@@ -91,3 +91,98 @@ class PcrTeamAdmin(admin.ModelAdmin):
 
 
 #admin.site.register(PcrTeam, PcrTeamAdmin)
+
+
+class SampleAdmin(admin.ModelAdmin):
+    filter_horizontal = ('symptom_list',)
+    fieldsets = (
+        ('Amostra', {
+            'fields': ('high_priority', ('sample_id', 'sample_type'), 'origin', 'collect_date'),
+        }),
+        ('Análise', {
+            'fields': (('is_extracted', 'is_amplified'), 'pcr_target_pair', 'result'),
+        }),
+        ('Dados clínicos', {
+            'fields': ('symptoms_start_date', 'symptom_list'),
+        }),
+    )
+admin.site.register(Sample, SampleAdmin)
+
+#class SampleInline(admin.TabularInline):
+#    model = Sample
+
+#class ExtractionEventAdmin(admin.ModelAdmin):
+#    inlines = [
+#        SampleInline,
+#    ]
+#admin.site.register(ExtractionEvent, ExtractionEventAdmin)
+
+
+class SymptomAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Symptom, SymptomAdmin)
+
+class ResultAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Result, ResultAdmin)
+
+class PcrTargetPairAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(PcrTargetPair, PcrTargetPairAdmin)
+
+class ExtractionKitAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ExtractionKit, ExtractionKitAdmin)
+
+class PcrKitAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(PcrKit, PcrKitAdmin)
+
+class PatientAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Patient, PatientAdmin)
+
+class SampleTypeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(SampleType, SampleTypeAdmin)
+
+class ExtractionEventAdmin(admin.ModelAdmin):
+    filter_horizontal = ('sample_list',)
+    fields = (
+        ('sample_list',),
+        ('start_time', 'end_time',),
+        ('extraction_kit', 'machine',),
+        ('status',),
+    )
+admin.site.register(ExtractionEvent, ExtractionEventAdmin)
+
+class ExtractionTeamMemberAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ExtractionTeamMember, ExtractionTeamMemberAdmin)
+
+class PcrTeamMemberAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(PcrTeamMember, PcrTeamMemberAdmin)
+
+class EventAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Event, EventAdmin)
+
+#class PcrQueueAdmin(admin.ModelAdmin):
+#    pass
+#admin.site.register(PcrQueue, PcrQueueAdmin)
+
+class ExtractionQueueAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ExtractionQueue, ExtractionQueueAdmin)
+
+class ExtractionMachineAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ExtractionMachine, ExtractionMachineAdmin)
+
+
+class PcrEventAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(PcrEvent, PcrEventAdmin)
+
+

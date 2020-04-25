@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 RESULT_CHOICES = (
         ('positive', 'POS'),
@@ -151,9 +152,11 @@ class Sample(models.Model):
     symptom_list = models.ManyToManyField(Symptom)
     is_extracted = models.BooleanField(default=False)
     is_amplified = models.BooleanField(default=False)
-    result = models.ForeignKey(Result, on_delete=models.CASCADE)
-    pcr_target_pair = models.ForeignKey(PcrTargetPair, on_delete=models.CASCADE)
+    result = models.ForeignKey(Result, on_delete=models.CASCADE, null=True, blank=True)
+    pcr_target_pair = models.ForeignKey(PcrTargetPair, on_delete=models.CASCADE, null=True, blank=True)
 
+    def __str__(self):
+        return self.sample_id
 
 class ExtractionTeamMember(models.Model):
     name = models.CharField(max_length=100, blank=False)
@@ -194,15 +197,10 @@ class PcrTeamMember(models.Model):
 class Event(models.Model):
     """ExtractionEvent and PcrEvent will be based on this class"""
     sample_list = models.ManyToManyField(Sample)
-    start_time = models.DateTimeField(auto_now_add=True, null=True)
-    end_time = models.DateTimeField(auto_now_add=False, null=True)
+    start_time = models.DateTimeField(default=timezone.now, null=True, blank=True)
+    end_time = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     status = models.CharField(max_length=20, choices=EXT_EVENT_CHOICES, blank=True)
     
-    def __str__(self):
-        return self.last_status_change()
-
-    def last_status_change(self):
-        return "{} {} at {}".format(self.machine, self.status, self.modified_time())
 
     def is_started(self):
         return self.status == "started"
@@ -260,7 +258,12 @@ class ExtractionEvent(Event):
     extraction_kit = models.ForeignKey(ExtractionKit, null=True, on_delete=models.CASCADE)
     #status = models.CharField(max_length=10, choices=EXT_EVENT_CHOICES, blank=True)
     machine = models.ForeignKey(ExtractionMachine, null=True, on_delete=models.CASCADE)
-    
+ 
+    def __str__(self):
+        return self.last_status_change()
+
+    def last_status_change(self):
+        return "{} {} at {}".format(self.machine, self.status, self.modified_time())   
     #def __str__(self):
     #    return "{} {} at {}".format(self.machine, self.status, self.modified_time())
 
@@ -282,14 +285,29 @@ class ExtractionEvent(Event):
     #        else:
     #            return 0
 
+
+class PcrMachine(models.Model):
+    name = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return self.name
+
+
+
 #class PcrEvent(models.Model):
 class PcrEvent(Event):
     #sample_list = models.ManyToManyField(Sample)
     #start_time = models.DateTimeField(auto_now_add=True, null=True)
     #end_time = models.DateTimeField(auto_now_add=False, null=True)
     pcr_kit = models.ForeignKey(ExtractionKit, null=True, on_delete=models.CASCADE)
-    amplified_target_pair = models.ForeignKey(PcrTargetPair, on_delete=models.CASCADE)
+    amplified_target_pair = models.ForeignKey(PcrTargetPair, null=True, on_delete=models.CASCADE)
+    machine = models.ForeignKey(PcrMachine, null=True, on_delete=models.CASCADE)
+ 
+    def __str__(self):
+        return self.last_status_change()
 
+    def last_status_change(self):
+        return "{} {} at {}".format(self.machine, self.status, self.modified_time())
 
 class OverwriteStorage(FileSystemStorage):
     '''

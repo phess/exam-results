@@ -1,0 +1,22 @@
+{% extends "lab_use/base.html" %}
+
+{% block title %}Amostras prontas para extração{% endblock %}
+
+{% block content %}
+		<h1>Amostras prontas para extração</h1>
+		<table>
+			<tr>
+				<th>ID</th>
+				<th>Prioridade?</th>
+				<th>Tipo de amostra</th>
+			</tr>
+			{% for sample in sample_list %}
+			<tr>
+				<td>{{ sample.sample_id }}</td>
+				<td>{{ sample.high_priority }}</td>
+				<td>{{ sample.sample_type }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+
+{% endblock %}

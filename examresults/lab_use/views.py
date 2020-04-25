@@ -2,11 +2,11 @@
 Views
 """
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
-from .models import ExamResult, SampleType
+from django.http import HttpResponse, HttpResponseRedirect
+from .models import *
 from django.views import generic
 from django.template import loader
-from .forms import UploadSheetForm
+from .forms import *
 import csv
 import io
 import datetime
@@ -20,6 +20,140 @@ def bulk_upload(request):
     TODO
     """
     pass
+
+
+def start(request):
+    """Start page"""
+    pass
+
+def add_sample(request):
+    if request.method == 'POST':
+        form = SampleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            this_sample = Sample.objects.last()
+            # obj_attribs = {
+                # sample_id : int(request.POST['sample_id']),
+                # sample_type : int(SampleType.objects.get(
+                                            # pk=request.POST['sample_type'])),
+                # origin : int(Laboratory.objects.get(pk=request.POST['origin'])),
+                # collect_date : request.POST['collect_date'],
+                # high_priority : bool(request.POST['high_priority']),
+                # symptoms_start_date : request.POST['symptoms_start_date'],
+                # symptom_list : [ Symptom.objects.get(pk=i) for i in 
+                                    # request.POST['symptom_list'] ],
+                # result : request.POST['result'],
+                # pcr_target_pair : request.POST['pcr_target_pair'],
+            # }
+            # this_sample = Sample(**obj_attribs)
+            #this_sample = Sample(**request.POST)
+            return HttpResponseRedirect('/admin/lab_use/sample/')
+    else:
+        form = SampleForm()
+    return render(request, 'lab_use/add_sample.html', {'form': form})
+
+def view_all_samples(request):
+    pass
+
+
+def view_sample(request, sample_id = id):
+    pass
+
+def get_extraction_queue():
+    ready_for_extraction = Sample.objects.filter(is_extracted=False,
+                                                 is_amplified=False)
+    prioritized_list = ready_for_extraction.order_by('-high_priority', 
+                                                     '-collect_date')
+    return prioritized_list
+
+def ready_for_extraction(request):
+    sample_list = get_extraction_queue()
+    return render(request, 'lab_use/view_samples.html', {'sample_list': sample_list})
+
+def start_extraction(request):
+    #pass
+    if request.method == 'POST':
+        sample_id_list = [ int(key) for key, val in request.POST.items() 
+                                                            if val == 'True' ]
+        if len(sample_id_list) > 12:
+            ## TODO: fail graciously if >12 samples given
+            pass
+        extraction = ExtractionEvent(start_time = datetime.datetime.now(),
+                                     status = 'started')
+        extraction.save()
+        sample_list = [ Sample.objects.get(pk=i) for i in sample_id_list ]
+        extraction.sample_list.add(*sample_list)
+        extraction.save()
+
+        return HttpResponseRedirect(
+                '/admin/lab_use/extractionevent/{}/change/'.format(extraction.pk))
+    # if request.method == 'POST':
+        # form = StartExtractionForm(request.POST)
+        # if form.is_valid():
+            # # Start a new extraction with the data given and get its ID
+            # this_extraction = ExtractionEvent(**request.POST)
+            # this_extraction.status = 'started'
+            # return HttpResponseRedirect('/extraction/view/{}/'.format(this_extraction))
+    # else:
+        # form = StartExtractionForm()
+    # return render(request, 'lab_use/start_extraction.html', {'form': form})
+
+
+def end_extraction(request, extraction_id = id):
+    finished_list = ExtractionEvent.objects.filter(state='finished')
+    return render(request, 'lab_use/end_extraction.html', {'extraction_list': finished_list})
+
+    
+    # if request.method == 'POST':
+        # form = EndExtractionForm(request.POST)
+        # if form.is_valid():
+            # # End the extraction with the data
+            # ext = ExtractionEvent.objects.find(pk=extraction_id)
+            # ext.status = 'finished'
+            # extraction_id = new_extraction(**extraction_data_kwargs)
+            # return HttpResponseRedirect('/extraction/view/{}/'.format(extraction_id))
+    # else:
+        # form = EndExtractionForm()
+    # return render(request, 'lab_use/start_extraction.html', {'form': form})
+
+def view_extraction(request, extraction_id = id):
+    pass
+    
+    # if request.method == 'POST':
+        # form = ViewExtractionForm
+        # if form.is_valid():
+            # ext = ExtractionEvent.objects.find(pk=extraction_id)
+            # # TODO:
+            # # Handle any attributes of this extraction that may have been
+            # # modified
+            # return HttpResponseRedirect('/extraction/view/{}/'.format(ext))
+    # else:
+        # form = ViewExtractionForm
+    # return render(request, 'lab_use/view_extraction.html', {'form': form})
+    
+def start_pcr(request):
+    pass
+
+def end_pcr(request, pcr_id = id):
+    pass
+
+def view_pcr(request, pcr_id = id):
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def process_sheet(f):

@@ -17,10 +17,14 @@ urlpatterns = [
     path('pdf_generate/<int:id>/', views.pdf_generate_view),
     
     path('start/', views.start),
+    path('sample/add/', views.add_sample),
+    path('sample/<int:id>/view/', views.view_sample),
+    path('sample/view_all/', views.view_all_samples),
+    path('extraction/list_samples/', views.ready_for_extraction),
     path('extraction/start/', views.start_extraction),
-    path('extraction/end/<int:id>/', views.end_extraction),
-    path('extraction/view/<int:id>/', views.view_extraction),
+    path('extraction/end/', views.end_extraction),
+    path('extraction/<int:id>/view/', views.view_extraction),
     path('pcr/start/', views.start_pcr),
-    path('pcr/view/<int:id>/', views.view_pcr),
-    path('pcr/end/<int:id>/', views.end_pcr),
+    path('pcr/<int:id>/view/', views.view_pcr),
+    path('pcr/<int:id>/end/', views.end_pcr),
 ]
