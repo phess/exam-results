@@ -15,4 +15,8 @@ urlpatterns = [
     path('resend/', views.resend_view),
     path('pdf_generate/', views.pdf_generate_view),
     path('pdf_generate/<int:id>/', views.pdf_generate_view),
+
+    path('sample/new', views.new_sample),
+    path('sample/<int:id>/view', views.view_sample),
+
 ]
