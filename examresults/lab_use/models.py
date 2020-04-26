@@ -222,7 +222,9 @@ class Amostra(models.Model):
                             help_text=_('Resultado'), blank=True, null=True)
 
     dt_criacao = models.DateField(_('Criado em'), auto_now_add=True, null=True)
-
+    
+    extraido = models.BooleanField(_('Extraído com sucesso'), default=False)
+    amplificado = models.BooleanField(_('PCR finalizado'), default=False)
 
 
 
