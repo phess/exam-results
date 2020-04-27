@@ -11,7 +11,6 @@ from .models import *
 
 PER_PAGE = 20
 
-
 class StateAdmin(admin.ModelAdmin):
     fields = ('name', 'short_name')
     ordering = ['name']
@@ -92,21 +91,28 @@ class PcrTeamAdmin(admin.ModelAdmin):
 
 #admin.site.register(PcrTeam, PcrTeamAdmin)
 
+class PatientInline(admin.TabularInline):
+    model = Patient
+    
 
+@admin.register(Sample)
 class SampleAdmin(admin.ModelAdmin):
     filter_horizontal = ('symptom_list',)
     fieldsets = (
         ('Amostra', {
-            'fields': ('high_priority', ('sample_id', 'sample_type'), 'origin', 'collect_date'),
+            'fields': ('high_priority', ('sample_id', 'sample_type', 'registration_date'), 'origin', 'collect_date'),
         }),
         ('Análise', {
-            'fields': (('is_extracted', 'is_amplified'), 'pcr_target_pair', 'result'),
+            'fields': ('analysis_state',),
         }),
         ('Dados clínicos', {
-            'fields': ('symptoms_start_date', 'symptom_list'),
+            'fields': ('patient', 'symptoms_start_date', 'symptom_list'),
         }),
+        ('PCR', {
+            'fields': ('pcr_target_pair', 'result'),
+        }),
+
     )
-admin.site.register(Sample, SampleAdmin)
 
 #class SampleInline(admin.TabularInline):
 #    model = Sample
