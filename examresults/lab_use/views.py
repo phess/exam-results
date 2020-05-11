@@ -2,11 +2,11 @@
 Views
 """
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
-from .models import ExamResult, SampleType
+from django.http import HttpResponse, HttpResponseRedirect
+from .models import *
 from django.views import generic
 from django.template import loader
-from .forms import UploadSheetForm
+from .forms import *
 import csv
 import io
 import datetime
@@ -20,6 +20,152 @@ def bulk_upload(request):
     TODO
     """
     pass
+
+
+def start(request):
+    """Start page"""
+    # Show all extractions and PCRs currently running"
+    # Show also the extraction queue and PCR queue
+    # Show also the latest N samples added to db
+    active_extractions = ExtractionEvent.objects.filter(status='started')
+    active_pcrs = PcrEvent.objects.filter(status='started')
+    latest_samples = Sample.objects.order_by('-registration_date')
+    high_prio_samples = Sample.objects.filter(high_priority=True)
+    pcr_ready_samples = Sample.objects.filter(analysis_state='ready for pcr')
+    return render(request, 'lab_use/status_panel.html', {
+                                        'extractions': active_extractions,
+                                        'pcrs': active_pcrs,
+                                        'latest_samples': latest_samples,
+                                        'prio_list': high_prio_samples,
+                                        'pcr_queue': pcr_ready_samples,
+                                        })
+
+def add_sample(request):
+    if request.method == 'POST':
+        form = NewSampleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            this_sample = Sample.objects.last()
+            this_id = this_sample.id
+            return HttpResponseRedirect('/sample/{}/view/'.format(this_id))
+    else:
+        form = NewSampleForm()
+    return render(request, 'lab_use/add_sample.html', {'form': form})
+
+def view_all_samples(request):
+    return HttpResponseRedirect('/admin/lab_use/sample/')
+
+def view_sample(request, id):
+    return HttpResponseRedirect('/admin/lab_use/sample/{}/'.format(id))
+
+def get_extraction_queue():
+    ready_for_extraction = Sample.objects.filter(
+                                    analysis_state='ready for extraction')
+    prioritized_list = ready_for_extraction.order_by('-high_priority', 
+                                                     '-collect_date')
+    return prioritized_list
+
+def start_extraction(request):
+    if request.method == 'POST':
+        sample_id_list = [ int(key) for key, val in request.POST.items() 
+                                                            if val == 'True' ]
+        if len(sample_id_list) > 12:
+            ## TODO: fail graciously if >12 samples given
+            pass
+        extraction = ExtractionEvent(start_time = datetime.datetime.now(),
+                                     status = 'started')
+        extraction.save()
+        sample_list = [ Sample.objects.get(pk=i) for i in sample_id_list ]
+        extraction.sample_list.add(*sample_list)
+        extraction.save()
+        for sample in sample_list:
+            sample.extraction_state = 'started'
+            sample.save()
+
+        return HttpResponseRedirect(
+                '/admin/lab_use/extractionevent/{}/change/'.format(extraction.pk))
+    else:
+        sample_list = get_extraction_queue()
+        return render(request, 'lab_use/view_samples.html', {'sample_list': sample_list})
+
+def choose_extraction_to_end(request):
+    started_list = ExtractionEvent.objects.filter(status='started')
+    return render(request, 'lab_use/choose_extraction_to_end.html', {'extraction_list': started_list})
+
+def end_extraction(request, id):
+    extraction = ExtractionEvent.objects.get(pk=id)
+    samples_in_this_extraction = extraction.sample_list.all()
+    
+    if request.method == 'POST':
+        
+        successfully_extracted = [ key for key,value in request.POST.items() if
+                                                              value == 'True' ]
+        failed_extraction = [ samp for samp in samples_in_this_extraction if
+                                        samp.pk not in successfully_extracted ]
+
+        # Mark successfully extracted samples as such
+        for sample_id in successfully_extracted:
+            sample = Sample.objects.get(pk=sample_id)
+            sample.extraction_state = 'finished'
+            sample.pcr_state = 'ready for pcr'
+            sample.save()
+        
+        extraction.status = 'finished'
+        extraction.end_time = datetime.datetime.now()
+        extraction.save()
+
+    else:
+        return render(request, 'lab_use/end_extraction.html', 
+                                                    {'extraction': extraction})
+
+def view_extraction(request, id):
+    return HttpResponseRedirect('/admin/lab_use/extractionevent/{}/'.format(id))
+   
+
+def get_pcr_queue():
+    ready_for_pcr = Sample.objects.filter(pcr_state='ready for pcr')
+    prioritized_list = ready_for_pcr.order_by('-high_priority', 
+                                                '-collect_date')
+    return prioritized_list
+
+
+def start_pcr(request):
+    if request.method == 'POST':
+        sample_id_list = [ int(key) for key, val in request.POST.items() 
+                                                            if val == 'True' ]
+        pcr = PcrEvent(start_time = datetime.datetime.now(), status = 'started')
+        pcr.save()
+        sample_list = [ Sample.objects.get(pk=i) for i in sample_id_list ]
+        pcr.sample_list.add(*sample_list)
+        pcr.save()
+    
+        return HttpResponseRedirect(
+                '/admin/lab_use/pcrevent/{}/change/'.format(pcr.pk))
+    else:
+        sample_list = get_pcr_queue()
+        return render(request, 'lab_use/view_samples.html', {'sample_list': sample_list})
+
+
+def end_pcr(request, pcr_id = id):
+    pass
+
+def view_pcr(request, pcr_id = id):
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def process_sheet(f):

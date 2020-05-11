@@ -1,0 +1,35 @@
+{% extends "lab_use/base.html" %}
+
+{% block title %}Painel de controle de status{% endblock %}
+
+{% block content %}
+	<!-- Amostras -->
+	<h1>Últimas amostras</h1>
+	<ul>{% for sample in latest_samples %}
+		<li><a href="/sample/{{ sample.id }}/view/">{{ sample }}</a></li>
+	{% endfor %}</ul>
+
+	<!-- Amostras de alta prioridade -->
+	<h1>Amostras prioritárias</h1>
+	<ul>{% for sample in prio_list %}
+		<li><a href="/sample/{{ sample.id }}/view/">{{ sample }}</a></li>
+	{% endfor %}</ul>
+
+	<!-- Extrações -->
+	<h1>Extrações em andamento</h1>
+	<ul>{% for extraction in extractions %}
+		<li><a href="/extraction/{{ extraction.id }}/view/">{{ extraction }}</a></li>
+	{% endfor %}</ul>
+
+	<!-- Amostras prontas para PCR -->
+	<h1>Amostras prontas para PCR</h1>
+	<ul>{% for sample in pcr_queue %}
+		<li><a href="/sample/{{ sample.id }}/view/">{{ sample }}</a></li>
+	{% endfor %}</ul>
+
+	<!-- PCRs -->
+	<h1>PCRs em andamento</h1>
+	<ul>{% for pcr in pcrs %}
+		<li><a href="/pcr/{{ pcr.id }}/view/">{{ pcr }}</a></li>
+	{% endfor %}</ul>
+{% endblock %}

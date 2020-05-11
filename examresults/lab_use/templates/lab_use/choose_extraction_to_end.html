@@ -1,0 +1,26 @@
+{% extends "lab_use/base.html" %}
+
+{% block title %}Fim da extração{% endblock %}
+
+{% block content %}
+		<h1>Selecione uma extração para finalizar</h1>
+		<table>
+			<tr>
+				<th>Máquina</th>
+				<th>Kit</th>
+				<th>Hora de início</th>
+				<th>Amostras</th>
+			</tr>
+			{% for ext in extraction_list %}
+			<tr>
+				<td><a href="/extraction/{{ ext.id }}/end">{{ ext.machine }}</a></td>
+				<td><a href="/extraction/{{ ext.id }}/end">{{ ext.kit }}</a></td>
+				<td><a href="/extraction/{{ ext.id }}/end">{{ ext.start_time }}</a></td>
+				<td><a href="/extraction/{{ ext.id }}/end">
+				{% for sample in ext.sample_list.all %}
+				{{ sample.sample_id }}<br/>{% endfor %}
+				</a></td>
+			</tr>
+			{% endfor %}
+		</table>
+{% endblock %}

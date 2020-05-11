@@ -1,0 +1,35 @@
+{% extends "lab_use/base.html" %}
+
+{% block title %}Fim da extração{% endblock %}
+
+{% block content %}
+		<h1>Selecione amostras para re-extração ou para entrar na fila de PCR</h1>
+		<p><span class="section-title">Dados desta extração</span> [<span class="edit-item"><a href="/extraction/{{ extraction.id }}/view/">editar esta extração</a></span>]</p>
+		<ul>
+			<li>Máquina: {{ extraction.machine }}</li>
+			<li>Kit: {{ extraction.extraction_kit }}</li>
+			<li>Hora de início: {{ extraction.start_time }}</li>
+			<li>Amostras: (veja abaixo e marque as extrações que ocorreram com sucesso)</li>
+		</ul>
+		<hr/>
+		<form action="/extraction/{{ extraction.id }}/end/" method="post">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<em>IMPORTANTE: extrações não marcadas com SUCESSO serão marcadas para re-extração.</em>
+			</tr>
+			<tr>
+				<th>Amostra</th>
+				<th>Sucesso</th>
+			</tr>
+			{% for sample in extraction.sample_list.all %}
+			<tr>
+				<td>{{ sample.sample_id }}</td>
+				<td><input type="checkbox" id="{{ sample.id }}" name="{{ sample.id }}" value="True" /></td>
+			</tr>
+			{% endfor %}
+		</table>
+		<input type="submit" value="Finalizar extração"/>
+		</form>
+
+{% endblock %}

@@ -7,15 +7,34 @@
 
 <body>
 
+<!--
 <table border="0">
-    <td><a href=/home>Principal</a></td>
+    <td><a href="/home">Principal</a></td>
     <td>|</td>
-    <td><a href=/upload>Upload</a></td>
+    <td><a href="/admin/lab_use/sample/add">Nova amostra</a></td>
     <td>|</td>
-    <td><a href=/report>Relatório</a></td>
+    <td><a href="/admin/lab_use/sample">Lista de amostras</a></td>
     <td>|</td>
-    <td><a href=/resend>Reenviar</a></td>
+    <td><a href="/report">Relatório</a></td>
+    <td>|</td>
+    <td><a href="/resend">Reenviar</a></td>
 </table>
+-->
+<p class="main-menu">
+<a href="/start/">Início</a>
+&nbsp;|&nbsp;
+<a href="/sample/add/">Nova amostra</a>
+&nbsp;|&nbsp;
+<a href="/sample/view_all/">Visualizar todas as amostras</a>
+&nbsp;|&nbsp;
+<a href="/extraction/start/">Iniciar extração</a>
+&nbsp;|&nbsp;
+<a href="/extraction/end/">Terminar extração</a>
+&nbsp;|&nbsp;
+<a href="/pcr/start/">Iniciar PCR</a>
+&nbsp;|&nbsp;
+<a href="/pcr/end/">Terminar PCR</a>
+</p>
 <hr>
 
 {% block content %}
@@ -29,10 +48,17 @@ replace me
 <br>
 <br>
 
+<div id="bottom">
+	<div id="copyright">
+		<p>&#169; Universidade Federal do Rio de Janeiro 2020</p>
+	</div>
+</div>
+<!--
 <table width="800" align="center" border="0" class="tabela">
 <td>
 <center>CopyLeft UFRJ 2020</center>
 </td>
 </table>
+-->
 </body>
 </html>

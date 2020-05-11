@@ -23,3 +23,40 @@ a:active {
 .tabela {
 	background-color: #d9c279;
 }
+
+.section-title {
+	font-weight: bold;
+	font-size: 150%;
+}
+
+div#bottom {
+	float: left;
+	width: 100%;
+}
+
+div#copyright {
+	margin: auto;
+	width: 50%;
+	background-color: #d9c279;
+}
+
+div#copyright p {
+	text-align: center;
+	padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+.edit-item {
+	font-style: italic;
+	font-size: 90%;
+}
+
+table {
+	border: 4px solid white;
+}
+
+th, td {
+	padding-right: 1em;
+	padding-left: 1em;
+	background-color: #eee;
+}
+

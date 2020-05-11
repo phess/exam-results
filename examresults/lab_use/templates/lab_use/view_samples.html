@@ -1,0 +1,33 @@
+{% extends "lab_use/base.html" %}
+
+{% block title %}Amostras prontas para extração{% endblock %}
+
+{% block content %}
+		<h1>Amostras prontas para extração</h1>
+		<form action="/extraction/start/" method="post">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<th></th>
+				<th>Extrair</th>
+				<th>ID</th>
+				<th>Prioridade?</th>
+				<th>Tipo de amostra</th>
+			</tr>
+			{% for sample in sample_list %}
+			<tr>
+				<td>{{ forloop.counter }}</td>
+				<td>{% if forloop.counter <= 12 %}
+				<input type="checkbox" id="{{ sample.id }}" name="{{ sample.id }}" value="True" checked />{% else %}
+				<input type="checkbox" id="{{ sample.id }}" name="{{ sample.id }}" value="True" />{% endif %}
+				</td>
+				<td>{{ sample.sample_id }}</td>
+				<td>{{ sample.high_priority }}</td>
+				<td>{{ sample.sample_type }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<input type="submit" value="Extrair"/>
+		</form>
+
+{% endblock %}
